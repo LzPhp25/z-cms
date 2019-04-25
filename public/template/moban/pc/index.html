@@ -1,0 +1,300 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+<head>
+    <meta charset="utf-8">
+    <title>{$conf.webName}</title>
+    <meta name="keywords" content="{$conf.keywords}" />
+    <meta name="description" content="{$conf.desc}" />
+    <link href="__INDEX__css/style.css" rel="stylesheet" type="text/css">
+    <script type="text/javascript" src="__INDEX__js/jquery-1.8.0.min.js"></script>
+    <script language="javascript" src="__INDEX__js/slide_1.js"></script>
+    <script type="text/javascript" src="__INDEX__js/jquery.superslide.2.1.1.js" /></script>
+    <script type="text/javascript" src="__INDEX__js/public.js"></script>
+    <script type="text/javascript" src="__INDEX__js/sdmenu.js"></script>
+//这是什么？阿萨德撒
+    <script>
+        $(function(){
+            var daohang = $('#daohang').find("li");
+            var cons = $("#cons").children("div");
+            daohang.bind("mouseover",function(){
+                daohang.removeClass("specialLi");
+                var ind = $(this).index();
+                cons.hide();
+                cons.eq(ind).show();
+                $(this).addClass("specialLi");
+            })
+        });
+    </script>
+</head>
+
+<body>
+<div class="pageTop">
+    <div class="paTBox">
+        <div class="Fptline">
+            <p> <a href="{:url('index/page/index',['id'=>148])}" title="济南阀门公司">关于我们</a> | <a href="{:url('index/page/index',['id'=>153])}" title="济南阀门产品">产品中心</a>| <a href="{:url('index/page/index',['id'=>152])}" title="济南阀门电话">联系我们</a> </p>
+        </div>
+        <div class="Sptline"> <a href="/" title=""><img src="/{$conf.logo}" alt="" class="logo"></a>
+            <dl>
+                <dd>服务热线：</dd>
+                <dt>{$conf.phone}</dt>
+            </dl>
+        </div>
+    </div>
+</div>
+<div class="nav">
+    <div class="navBox"id="navmenu">
+        <ul class="menu">
+            <li class="mainlevel libh" ><a href="/" title="">网站首页</a> </li>
+            {volist name='cateList' id='list'}
+            <li class="mainlevel">
+                <a href="{if $list.temp_type == 1}{:url('index/volist/index',['id'=>$list.id])}{elseif $list.temp_type == 3 }{$list.out_url}{else}{:url('index/page/index',['id'=>$list.id])} {/if}"  title="{$list.cate_name}" class="navList">{$list.cate_name}</a>
+            </li>
+            {/volist}
+        </ul>
+    </div>
+</div>
+<div class="full_banner">
+    <div class="bd">
+        <ul>
+            {volist name='bannerList' id='list'}
+            <li style="background:url(/{$list}) no-repeat center 0"></li>
+            {/volist}
+        </ul>
+    </div>
+    <div class="hd">
+        <ul>
+        </ul>
+    </div>
+</div>
+<div class="search">
+
+</div>
+<div class="compare">
+    <div class="compaName"></div>
+    <div class="compaCon">
+        <div class="leftComp">
+            <dl>
+                <dd>NO.1质量一般</dd>
+                <dt>阀门质量一般，性价比差，安装后常常出现规格不达标等问题？</dt>
+            </dl>
+            <dl>
+                <dd>NO.2价格昂贵</dd>
+                <dt>价格昂贵，在成本上花费更多的资金</dt>
+            </dl>
+            <dl>
+                <dd>NO.3售后无保障</dd>
+                <dt>购买之后售后服务不到位，服务态度差，不能解决问题</dt>
+            </dl>
+        </div>
+        <div class="rightComp">
+            <ul>
+                <dl>
+                    <dd>质量保障</dd>
+                    <dt>Quality assurance</dt>
+                </dl>
+                <li>严格按照国际标准生产，可随时实地参观工厂，质量有保障</li>
+            </ul>
+            <ul>
+                <dl>
+                    <dd>价格低廉</dd>
+                    <dt>Low price</dt>
+                </dl>
+                <li>产品价格低于市场价，物美价廉，买的放心，用的安心</li>
+            </ul>
+            <ul>
+                <dl>
+                    <dd>售后周到</dd>
+                    <dt>considerate after-sale</dt>
+                </dl>
+                <li>7*24小时为您提供售后服务，百分百为您解决售后问题</li>
+            </ul>
+        </div>
+    </div>
+</div>
+<div class="casePart">
+    <div class="caseCon">
+        <div class="caseName"></div>
+        <div class="caseConta">
+            <ul class="leftCaseC" id="daohang">
+
+                {volist name='indexCateList' id='list'}
+                <li class="specialLi">
+                    <p>BOILER ERECTION</p>
+                    <h3>{$list}</h3>
+                </li>
+                {/volist}
+            </ul>
+
+
+            <div class="rightCaseC" id="cons">
+
+                {volist name='articleArray' id='list'}
+                <div class="subCaseC"  {if $i==1} style="display:block;" {/if}>
+
+                <div class="UpRCase"> <img src="/{$list.one.picture}"  alt="{$list.one.title}" title="{$list.one.title}" class="UpCasePic">
+                    <div class="rightUpLine">
+                        <h3><a href="{:url('index/content/index',['id'=>$list.one.id])}" title="{$list.one.title}">{$list.one.title}</a></h3>
+                        <p>{$list.one.desc}.....</p>
+                        <div class="caseBline"> <a href="{:url('index/volist/index',['id'=>$list.one.id])}" title="{$list.one.title}">
+                            <img src="__INDEX__picture/casebtn2.jpg" alt="" title=""></a> </div>
+                    </div>
+                </div>
+
+                <ul class="DonRCase">
+                    {volist name='$list.two' id='li'}
+                    <li><a href="{:url('index/content/index',['id'=>$li.id])}" title="{$li.title}">
+                        <p>热水节能锅炉</p>
+                        <img style="width: 100%;" src="/{$li.picture}"  alt="{$li.title}" title="{$li.title}"/></a></li>
+                    {/volist}
+                </ul>
+            </div>
+            {/volist}
+
+        </div>
+    </div>
+</div>
+</div>
+<div class="AdsLine">
+    <div class="AdsCon">
+        <div class="AdsPhone">
+            <dl>
+                <dd>服务热线：</dd>
+                <dt>{$conf.phone}</dt>
+            </dl>
+            <a href="#" title=""><img src="__INDEX__picture/adsbtn.jpg" alt=""></a> </div>
+    </div>
+</div>
+<div class="Advant">
+    <div class="AdvName"></div>
+    <div class="AdCon1">
+        <p>具有一批高素质的工程技术人员和规范完善的专业施工管理队伍，拥有高中级技术职称的25人，具备各类职称和各类技术资格的专业技术人员80人</p>
+    </div>
+    <div class="AdCon2">
+        <p>本公司技术力量雄厚，施工设备先进。<br>
+            多年来，公司密切跟踪国际先进水平的热工技术及制冷技术，配合生产厂家研制开发了具有同行业先进水平的名牌产品。</p>
+    </div>
+    <div class="AdCon3">
+        <p>秉承“质量第一、确保工期、新守合同、优质服务”的经营理念，严格按国家《规程》、《规范》建立完善质量保证体系。</p>
+    </div>
+    <div class="AdCon4">
+        <p>施工前免费提供实地调研、方案设计、编制投资预算等服务，为拥有适应各种专业施工的先进机械设备和检测手段。确保施工顺畅奠定良好基础</p>
+    </div>
+    <h3 class="coperName"></h3>
+</div>
+<div class="AdsLine2">
+    <div class="AdsCon">
+        <div class="AdsPhone">
+            <dl>
+                <dd>服务热线：</dd>
+                <dt>{$conf.phone}</dt>
+            </dl>
+            <a href="#" title=""><img src="__INDEX__picture/adsbtn.jpg" alt=""></a> </div>
+    </div>
+</div>
+<div class="mainCon">
+    <h3 class="profileName"></h3>
+    <div class="proFcon"> <img src="__INDEX__picture/profimic.jpg" alt="" title="" class="proFPic"> <img src="__INDEX__picture/profipic.jpg" class="proN">
+        <div class="priText">
+            <h3>济南北科阀门有限公司</h3>
+            <p>济南北科阀门有限公司一家集研发、生产、销售、服务于一体的阀门专业制造商。公司技术力量雄厚，企业拥有各类加工阀门的先进设备，完善的理化检测手段和性能测试设备。并与科研机构组建了阀门产、学、研联合体。增强了企业产品的开发，技术创新和企业管理的综合实力。</p>
+            <a href="{:url('index/page/index',['id'=>148])}" title="济南北科阀门有限公司"><img src="__INDEX__picture/probtn.jpg" alt="" class="proBtn"></a> </div>
+    </div>
+    <div class="newsCon">
+        <div class="leftNews">
+            <div class="newsTop">
+                <h3>热门产品</h3>
+                <a href="{:url('index/volist/index',['id'=>153])}" title="">更多</a> </div>
+            <div class="newsContext">
+                <table align=center border="0" cellpadding="0" style="border-collapse: collapse">
+                    <tr>
+                        <td><div id=design style="OVERFLOW: hidden; HEIGHT: 440px;">
+                            <div id=design1 style="OVERFLOW: hidden">
+                                <TABLE cellSpacing=0 cellPadding=0 width=357 align=center border=0>
+                                    {volist name='product' id='list'}
+                                    <tr>
+                                        <td align=left width="357" height="28" class="ask"><a class=b2 href="{:url('index/content/index',['id'=>$list.id])}" title="{$list.title}" class="tag_title_link">{$list.title}</a></td>
+                                    </tr>
+                                    {/volist}
+                                </table>
+                            </div>
+                        </div>
+                            <script>
+                                var speed=65
+                                design2.innerHTML=design1.innerHTML
+                                function Marquee2()
+                                {
+                                    if(design2.offsetTop-design.scrollTop<=0)
+                                        design.scrollTop-=design1.offsetHeight
+                                    else
+                                    {
+                                        design.scrollTop++
+                                    }
+                                }
+                                var MyMar2=setInterval(Marquee2,speed)
+                                design.onmouseover=function()
+                                {
+                                    clearInterval(MyMar2)
+                                }
+                                design.onmouseout=function()
+                                {
+                                    MyMar2=setInterval(Marquee2,speed)
+                                }
+                            </script>
+                            <script language="javascript">
+                                <!--
+                                function showchargemenu(m1)
+                                {
+                                    document.getElementById("test").innerHTML = m1.innerHTML;
+                                }
+                                //-->
+                            </script></td>
+                    </tr>
+                </table>
+            </div>
+        </div>
+        <div class="leftNews">
+            <div class="newsTop">
+                <h3>行业动态</h3>
+                <a href="{:url('index/volist/index',['id'=>151])}" title="">更多</a> </div>
+            <div class="newsContext"> <img src="__INDEX__picture/newspic.jpg" alt="" title="" class="mewsBPic">
+                <ul>
+
+                    {volist name='news' id='list'}
+                    <li><a href="{:url('index/content/index',['id'=>$list.id])}" title="{$list.title}">{$list.title}</a></li>
+
+                    {/volist}
+                </ul>
+            </div>
+        </div>
+        <div class="rightNews">
+            <div class="newsTop">
+                <h3>留言反馈</h3>
+            </div>
+            <div class="newsContext">
+                <p>
+                    <input style="width: 323px;border: 1px solid #ccc;height: 45px;margin: 15px 0px" value="姓名" type="text" name="title"/>
+                </p>
+                <p>
+                    <input style="width: 323px;border: 1px solid #ccc;height: 45px;margin: 15px 0px" type="text" value="电话" name="title"/>
+                </p>
+                <p>
+                    <input style="width: 323px;border: 1px solid #ccc;height: 45px;margin: 15px 0px" type="text" value="内容" name="title"/>
+                </p>
+
+                <p>
+                    <button id="tj">提交</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+</div>
+<script>
+    $("#tj").click(function () {
+        alert('留言成功！');
+    })
+</script>
+{include file='../../../public/pc/footer'}
+
+</body>
+</html>

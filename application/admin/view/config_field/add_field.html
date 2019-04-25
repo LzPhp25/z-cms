@@ -1,0 +1,134 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="cn_name" class="layui-form-label">
+                <span class="x-red">*</span>中文名称
+            </label>
+            <div class="layui-input-inline">
+                <input placeholder="中文"  type="text" id="cn_name" name="cn_name" lay-verify="required" autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">唯一标识的汉字或英文 如：网站名称</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="en_name" class="layui-form-label">
+                <span class="x-red">*</span>英文名称
+            </label>
+            <div class="layui-input-inline">
+                <input   placeholder="英文字母"  type="text" id="en_name" name="en_name" lay-verify="required"  autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">唯一标识的英文，如：webName</span>
+            </div>
+        </div>
+        <!--//1.输入框2.单选3.复选4.下拉菜单5.文本域6.文件-->
+        <div class="layui-form-item">
+            <label for="en_name" class="layui-form-label">
+                <span class="x-red">*</span>字段类型
+            </label>
+            <div  class="layui-input-inline">
+                <select name="field_type"  class="layui-input">
+                    <option value="1">输入框</option>
+                    <option value="2">单选按钮</option>
+                    <option value="3">复选按钮</option>
+                    <option value="4">下拉菜单</option>
+                    <option value="5">文本域</option>
+                    <option value="6">图片上传</option>
+                    <option value="7">文件上传</option>
+                    <option value="8">时间选择</option>
+                </select>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red"></span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="en_name" class="layui-form-label">
+                <span class="x-red">*</span>默认值
+            </label>
+            <div  class="layui-input-inline">
+                <input type="text"  name="value" autocomplete="off"  class="layui-input"  >
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red"></span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="en_name" class="layui-form-label">
+                <span class="x-red">*</span>可选值
+            </label>
+            <div  class="layui-input-inline">
+                <textarea style="height: 150px"  name="values"   class="layui-textarea"  ></textarea>
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">用于selected等多选字段,值与值之间要用“,”隔开，例如：男,女</span>
+            </div>
+        </div>
+        <input type="hidden" name="__token__" value="{$Request.token}" />
+<div class="layui-form-item">
+    <label  class="layui-form-label">
+    </label>
+    <button type="button"  class="layui-btn" lay-filter="add" lay-submit="">
+        增加
+    </button>
+</div>
+</form>
+</div>
+<script>
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+        //监听提交
+        form.on('submit(add)', function(data){
+            //console.log(data);
+            //var cateData = $('.layui-form').serialize();
+            $.ajax({
+                type:'post',
+                data:data.field,
+                dataType:'json',
+                url:"{:url('admin/config_field/add')}",
+                success:function (data) {
+                    if (data.code == 0){
+                        layer.alert(data.message, {icon: 6},function () {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                            return false;
+                        });
+                    }else{
+                        layer.alert(data.message, {icon: 5});
+                        return false;
+                    }
+                }
+            })
+        });
+    });
+
+</script>
+</body>
+
+</html>

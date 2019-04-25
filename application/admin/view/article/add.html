@@ -1,0 +1,409 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    {include file='public/ueditor'}
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="title" class="layui-form-label">
+                <span class="x-red">*</span>标题
+            </label>
+            <div class="layui-input-inline">
+                <input style="width: 500px" type="text" id="title" name="title" required="" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="title" class="layui-form-label">
+                <span class="x-red">*</span>属性
+            </label>
+            <div style="width: 510px" class="layui-input-inline">
+                {volist name='attrList' id='list'}
+                    <input type="checkbox" name="attr[]"  value="{$list.attr_value}" title="{$list.attr_name}【{$list.attr_value}】">
+                {/volist}
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="keywords" class="layui-form-label">
+                <span class="x-red"></span>关键字
+            </label>
+            <div class="layui-input-inline">
+                <input style="width: 500px"  type="text" id="keywords" name="keywords"   autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="desc" class="layui-form-label">
+                <span class="x-red"></span>描述
+            </label>
+            <div class="layui-input-inline">
+                    <textarea style="width: 500px" id="desc" name="desc" class="layui-textarea"></textarea>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="desc" class="layui-form-label">
+                <span class="x-red"></span>排序
+            </label>
+            <div class="layui-input-inline">
+                <input  type="text" id="sort" name="sort"  value="50"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label class="layui-form-label">
+                <span class="x-red"></span>封面图
+            </label>
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn" id="test1">
+                    <i class="layui-icon">&#xe67c;</i>上传图片
+                </button>
+                <div class="layui-upload-list layui-input-inline ">
+                    <img style="height: 80px" class="layui-upload-img" src="/static/admin/images/pic.png"  id="demo1">
+                </div>
+                <input type="hidden" name="picture"  value="" id="up">
+            </div>
+        </div>
+        <!--模型表开始-->
+        <?php  foreach($confList as $key=>$value):  ?>
+        <!--输入框-->
+        <?php if($value['field_type'] == 1):  ?>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><?php  echo $value['cn_name'] ?></label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 500px" name="<?php  echo $value['en_name'] ?>"  id="<?php  echo $value['en_name'] ?>"  value="<?php  echo $value['value'] ?>" autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <!--单选框-->
+        <?php elseif($value['field_type'] == 2):
+                        $radioArr = explode(',',$value['values']);
+                    ?>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><?php  echo $value['cn_name'] ?></label>
+            <div class="layui-input-block">
+                <?php  foreach($radioArr as $k=>$v):  ?>
+                <input    <?php if($value['value'] == $v):  ?>  checked  <?php endif;?>  type="radio" name="<?php  echo $value['en_name'] ?>" value="<?php  echo $v; ?>" title="<?php  echo $v; ?>">
+                <?php  endforeach;?>
+            </div>
+        </div>
+        <!--复选框-->
+        <?php elseif($value['field_type'] == 3):
+                      $checkArr = explode(',',$value['values']);
+                      ?>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><?php  echo $value['cn_name'] ?></label>
+            <div class="layui-input-block">
+                <?php  foreach($checkArr as $k=>$v):  ?>
+                <input
+                <?php if($value['value']):
+                            $checkedArr = explode(',',$value['value']);?>
+                <?php  foreach($checkedArr as $a=>$b):  ?>
+                <?php if($b == $v):?>
+                <?php echo 'checked';?>
+                <?php endif;?>
+                <?php  endforeach;?>
+                <?php endif;?>
+                type="checkbox" name="<?php  echo $value['en_name'] ?>[]"  value="<?php  echo $v; ?>"  title="<?php echo $v; ?>">
+                <?php  endforeach;?>
+            </div>
+        </div>
+        <!--下拉框-->
+        <?php elseif($value['field_type'] == 4):
+                        $selectedArr = explode(',',$value['values']);
+                     ?>
+        <div class="layui-form-item">
+            <label class="layui-form-label"><?php  echo $value['cn_name'] ?></label>
+            <div class="layui-input-block">
+                <select name="<?php  echo $value['en_name'] ?>">
+                    <?php  foreach($selectedArr as $k=>$v): ?>
+                    <option   <?php if($value['value'] == $v):  ?>  selected  <?php endif;?>          value="<?php echo $v; ?>"><?php echo $v; ?></option>
+                    <?php  endforeach;?>
+                </select>
+            </div>
+        </div>
+        <?php elseif($value['field_type'] == 5):  ?>
+        <div class="layui-form-item layui-form-text">
+            <label class="layui-form-label"><?php  echo $value['cn_name'] ?></label>
+            <div class="layui-input-block">
+                <textarea name="<?php  echo $value['en_name'] ?>" placeholder="请输入内容" class="layui-textarea"><?php  echo $value['value'] ?></textarea>
+            </div>
+        </div>
+        <?php elseif($value['field_type'] == 6):  ?>
+        <div class="layui-form-item">
+            <label for="stock_num" class="layui-form-label">
+                <?php  echo $value['cn_name'] ?>
+            </label>
+            <div class="layui-input-block">
+                <div  style="display: flex">
+                    <input style="width: 600px"  class="layui-input" type="text"  id="<?php echo $value['en_name'] ?>"  name="<?php  echo $value['en_name'] ?>"  value="<?php  echo $value['value'] ?>" >
+                    <p style="margin-left: 20px" data-id ='<?php echo $value['en_name']; ?>'  class="layui-btn demoMore"  >上传</p>
+                    <div>
+                        <?php if($value['value']):?>
+                        <a id="href_<?php echo $value['en_name']; ?>" target="_blank"  href="/<?php  echo $value['value'] ?>"><img id="src_<?php echo $value['en_name']; ?>"  style="height: 38px;border: 1px solid red;margin-left: 15px" src="/<?php  echo $value['value'] ?>"/> </a>
+                        <?php else: ?>
+                        <a  id="href_<?php echo $value['en_name']; ?>" target="_blank" href="###"><img id="src_<?php echo $value['en_name']; ?>"  style="height: 38px;border: 1px solid red;margin-left: 15px" src="/static/admin/images/yulan.png"/> </a>
+                        <?php endif; ?>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <?php elseif($value['field_type'] == 7):  ?>
+        <div class="layui-form-item">
+            <label for="stock_num" class="layui-form-label">
+                <?php  echo $value['cn_name'] ?>
+            </label>
+            <div class="layui-input-block">
+                <div  style="display: flex">
+                    <input style="width: 600px"  class="layui-input" type="text"  id="<?php echo $value['en_name'] ?>"  name="<?php  echo $value['en_name'] ?>"  value="<?php  echo $value['value'] ?>" >
+                    <p style="margin-left: 20px" data-id ='<?php echo $value['en_name']; ?>'  class="layui-btn  fileUp"  >上传</p>
+                </div>
+            </div>
+        </div>
+        <?php elseif($value['field_type'] == 8):  ?>
+        <div class="layui-form-item">
+            <label for="stock_num" class="layui-form-label">
+                <?php  echo $value['cn_name'] ?>
+            </label>
+            <div class="layui-input-block">
+                <input type="text" style="width: 200px" name="<?php  echo $value['en_name'] ?>"  id="<?php  echo $value['en_name'] ?>"  value="<?php  echo $value['value'] ?>" autocomplete="off" class="layui-input datetime">
+            </div>
+        </div>
+        <?php endif;?>
+        <?php  endforeach;?>
+
+        <!--模型表结束-->
+        <div class="layui-form-item">
+            <label for="editor" class="layui-form-label">
+                <span class="x-red"></span>正文
+            </label>
+            <div class="layui-input-inline">
+                <div class="layui-input-inline">
+                    <textarea   id="editor" style="height: 400px;width: 1000px"  name="content"> </textarea>
+                    <script type="text/javascript">
+                        //实例化编辑器
+                        var ue = UE.getEditor('editor');
+                    </script>
+                </div>
+            </div>
+        </div>
+        <!--相册模式-->
+
+        <div class="layui-form-item">
+            <label for="author" class="layui-form-label">
+                <span class="x-red"></span>相册模式
+            </label>
+            <div class="layui-input-inline">
+                <input type="radio" name="photos" value="1"   title="开启" lay-filter="ppp"><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>开启</div></div>
+                <input type="radio" name="photos" value="0"  title="关闭" checked="" lay-filter="ppp"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>关闭</div></div>
+            </div>
+        </div>
+        <div style="display: none" class="layui-form-item  photos">
+            <fieldset class="layui-elem-field layui-field-title" style="margin-top: 30px;">
+                <legend>上传多张图片</legend>
+            </fieldset>
+            <div class="layui-upload">
+                <button type="button" class="layui-btn" id="test2">多图片上传</button>
+                <blockquote class="layui-elem-quote layui-quote-nm" style="margin-top: 10px;">
+                    预览图：
+                    <div class="layui-upload-list" id="demo2"></div>
+                </blockquote>
+            </div>
+        </div>
+        <script>
+            layui.use('form', function () {
+                var form = layui.form;
+                form.on('radio(ppp)', function (data) {
+                    console.log(data);
+                    if (data.value == 1){
+                        $(".photos").css('display','block') ;
+                    }else {
+                        $(".photos").css('display','none') ;
+                    }
+
+                });
+            });
+        </script>
+
+        <!--相册模式-->
+        <div class="layui-form-item">
+            <label  class="layui-form-label">
+                <span class="x-red"></span>审核
+            </label>
+            <div class="layui-input-inline">
+                <input type="radio" name="reviewed" value="1" title="已审核" checked=""><div class="layui-unselect layui-form-radio layui-form-radioed"><i class="layui-anim layui-icon"></i><div>已审核</div></div>
+                <input type="radio" name="reviewed" value="0" title="未审核"><div class="layui-unselect layui-form-radio"><i class="layui-anim layui-icon"></i><div>未审核</div></div>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="click" class="layui-form-label">
+                <span class="x-red"></span>点击量
+            </label>
+            <div class="layui-input-inline">
+                <input  type="text" id="click" name="click" value="<?php echo mt_rand(50,200); ?>"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="click" class="layui-form-label">
+                <span class="x-red"></span>创建时间
+            </label>
+            <div class="layui-input-inline">
+                <input  type="text" id="create_time" name="create_time" value="<?php echo date('Y-m-d H:i:s'); ?>"  autocomplete="off" class="layui-input datetime">
+            </div>
+        </div>
+        <input type="hidden" name="__token__" value="{$Request.token}" />
+        <input type="hidden" name="pattern_id" value="{$pattern_id}">
+        <input type="hidden" name="cate_id" value="{$cateId}">
+        <div class="layui-form-item">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button type="button"  class="layui-btn" lay-filter="add" lay-submit="">
+                增加
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+        $('.datetime').each(function() {
+            laydate.render({
+                elem: this       //使用this指向当前元素,不能使用class名, 否则只有第一个有效
+                ,type: 'datetime'
+            });
+        })
+    });
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+        //监听提交
+        form.on('submit(add)', function(data){
+            $.ajax({
+                type:'post',
+                data:data.field,
+                dataType:'json',
+                url:"{:url('admin/article/addArticle')}",
+                success:function (data) {
+                    if (data.code == 0){
+                        layer.alert(data.message, {icon: 6},function () {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                           // x_admin_father_reload();
+                            return false;
+                        });
+                    }else{
+                        layer.alert(data.message, {icon: 5});
+                        return false;
+                    }
+                }
+            })
+        });
+    });
+    layui.use('upload', function() {
+        var $ = layui.jquery
+            , upload = layui.upload;
+        //同时绑定多个元素，并将属性设定在元素上
+        upload.render({
+            elem: '.demoMore'
+            , url:"{:url('admin/conf/uploadImage')}"
+            ,accept:'images'
+            ,field:'image'
+            , done: function (res, index, upload) {
+                var item = this.item;
+                if (res.code == 0){
+                    layer.msg('上传成功！', {icon: 6},function() {
+                        var inputId = item.attr('data-id');
+                        $('#'+inputId).val(res.img);
+                        $('#href_'+inputId).attr('href', '/'+res.img);
+                        $('#src_'+inputId).attr('src', '/'+res.img);
+                    });
+                }else{
+                    layer.msg(res.message);
+                }
+            }
+        });
+    });
+
+    layui.use('upload', function() {
+        var $ = layui.jquery
+            , upload = layui.upload;
+        //同时绑定多个元素，并将属性设定在元素上
+        upload.render({
+            elem: '.fileUp'
+            , url:"{:url('admin/conf/uploadDocument')}"
+            ,accept:'file'
+            ,field:'file'
+            , done: function (res, index, upload) {
+                var item = this.item;
+                if (res.code == 0){
+                    layer.msg('上传成功！', {icon: 6},function() {
+                        var inputId = item.attr('data-id');
+                        $('#'+inputId).val(res.img);
+                    });
+                }else{
+                    layer.msg(res.message);
+                }
+            }
+        });
+    });
+
+    layui.use('upload', function(){
+        var upload = layui.upload;
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1' //绑定元素
+            ,url: "{:url('admin/article/upload')}" //上传接口
+            ,accept: 'images' //允许上传的文件类型
+            ,size: 900//最大允许上传的文件大小
+            ,done: function(res){
+                //上传完毕回调
+                if (res.code == 0){
+                    layer.msg('上传成功！',{icon: 6,time:1000});
+                    $('#demo1').attr('src', '/'+res.img);
+                    $('#up').val(res.img);
+                }else{
+                    layer.msg(res.message,{icon: 5,time:1000});
+                }
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
+        //多图片上传
+        upload.render({
+            elem: '#test2'
+            ,url:"{:url('admin/article/upload')}"
+            ,multiple: true
+            ,before: function(obj){
+                //预读本地文件示例，不支持ie8
+                // obj.preview(function(index, file, result){
+                //     $('#demo2').append('<img style="height: 80px" src="'+ result +'" alt="'+ file.name +'" class="layui-upload-img">')
+                // });
+            }
+            ,done: function(res){
+                $('#demo2').append('<img style="height: 80px" src="/'+ res.img +'"  class="layui-upload-img">')
+                $('#demo2').append('<input type="hidden" value="/'+ res.img +'" name="photo_list[]"  />')
+            }
+        });
+    });
+</script>
+</body>
+
+</html>

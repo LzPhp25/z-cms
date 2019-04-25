@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <link rel="stylesheet" href="__ADMIN__plus/colpick/colpick.css">
+    <script type="text/javascript" src="__ADMIN__plus/colpick/colpick.js"></script>
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+    <style>
+        th td {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+       系统设置 》 字段列表
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+
+    <div style="width: 600px">
+        <form class="layui-form" action="">
+            <div class="layui-form-item">
+                <label class="layui-form-label">图片类型</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="image_type"   value="{$system.image_type}"   autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">多个文件中间需要用","隔开</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">图片大小</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="image_size"   value="{$system.image_size}"   autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">字节 B</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">文件类型</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="file_type"   value="{$system.file_type}"   autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">多个文件中间需要用","隔开</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">文件大小</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="file_size"   value="{$system.file_size}"   autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">字节 B</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">开启水印</label>
+                <div class="layui-input-block">
+                    <input type="radio" {if $system.is_code ==0} checked  {/if} name="is_code" value="0" title="关闭">
+                    <input type="radio" {if $system.is_code ==1} checked  {/if}name="is_code" value="1" title="图片">
+                    <input type="radio" {if $system.is_code ==2} checked  {/if}name="is_code" value="2" title="文字">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">图片水印</label>
+                <div class="layui-input-block">
+                    <div style="display: flex;">
+                        <input style="width:400px" type="text"  id="image_code"  name="image_code"   value="{$system.image_code}" autocomplete="off" class="layui-input">
+                        <button type="button" class="layui-btn" id="test1">上传图片</button>
+                        <img style="height: 38px;margin-left: 15px"  id="preview" src="/{$system.image_code}">
+                    </div>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">文字水印</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="text_code"   value="{$system.text_code}"  autocomplete="off" class="layui-input">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">水印方位</label>
+                <div class="layui-input-block">
+                    <input type="radio" {if $system.code_south ==1} checked  {/if} name="code_south" value="1" title="左上角">
+                    <input type="radio" {if $system.code_south ==2} checked  {/if} name="code_south" value="2" title="上居中">
+                    <input type="radio" {if $system.code_south ==3} checked  {/if} name="code_south" value="3" title="右上角">
+                    <input type="radio" {if $system.code_south ==4} checked  {/if} name="code_south" value="4" title="左居中">
+                    <input type="radio" {if $system.code_south ==5} checked  {/if} name="code_south" value="5" title="正居中">
+                    <input type="radio" {if $system.code_south ==6} checked  {/if} name="code_south" value="6" title="右居中">
+                    <input type="radio" {if $system.code_south ==7} checked  {/if} name="code_south" value="7" title="左下角">
+                    <input type="radio" {if $system.code_south ==8} checked  {/if} name="code_south" value="8" title="下居中">
+                    <input type="radio" {if $system.code_south ==9} checked  {/if} name="code_south" value="9" title="右下角">
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">图片透明度</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="image_issue"   value="{$system.image_issue}"   autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">0—100</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">文字颜色</label>
+                <div class="layui-input-inline">
+                        <input type="text" name="text_color"  id="picker"  value="{$system.text_color}"   autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">点击输入框选择颜色</span>
+                </div>
+                </div>
+
+            <div class="layui-form-item">
+                <label class="layui-form-label">文字大小</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="text_size"   value="{$system.text_size}"   autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">PX</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">定义排序</label>
+                <div class="layui-input-block">
+                    <input type="radio" {if $system.article_order ==1} checked  {/if} name="article_order" value="1" title="时间">
+                    <input type="radio" {if $system.article_order ==2} checked  {/if} name="article_order" value="2" title="自定义">
+
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">定义升降</label>
+                <div class="layui-input-block">
+                    <input type="radio" {if $system.order_by ==1} checked  {/if} name="order_by" value="1" title="升序">
+                    <input type="radio" {if $system.order_by ==2} checked  {/if}name="order_by" value="2" title="降序">
+
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">推送Token</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="baidu"   value="{$system.baidu}"   autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">百度推送token</span>
+                </div>
+            </div>
+            <input type="hidden"  name="id"  value="{$system.id}">
+            <div  class="layui-form-item">
+                <button style="margin-left: 200px" type="button"  class="layui-btn" lay-filter="add" lay-submit="">
+                   保存
+                </button>
+            </div>
+
+        </form>
+    </div>
+</div>
+<script>
+    //水印图片上传
+    layui.use('upload', function(){
+        var upload = layui.upload;
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1' //绑定元素
+            ,url: "{:url('admin/system/waterImage')}" //上传接口
+            ,accept:'images'
+            ,size:'500'
+            ,done: function(res){
+                if (res.code == 0){
+                    layer.msg('上传成功！',{icon: 6},function () {
+                        $('#image_code').val(res.img);
+                        $('#preview').attr('src','/'+res.img);
+                        $('#preview').css('border',' 1px solid red');
+                    });
+                }else{
+                    layer.msg(res.message);
+                }
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
+    });
+    //颜色选择器
+    $('#picker').colpick({
+        layout:'hex',
+        submit:0,
+        colorScheme:'dark',
+        onChange:function(hsb,hex,rgb,el,bySetColor) {
+
+            $(el).css('border-color','#'+hex);
+
+            // Fill the text box just if the color was set using the picker, and not the colpickSetColor function.
+
+            if(!bySetColor) $(el).val('#'+hex);
+
+        }
+    }).keyup(function(){
+
+        $(this).colpickSetColor(this.value);
+
+    });
+
+    layui.use('colorpicker', function(){
+        var colorpicker = layui.colorpicker;
+        //渲染
+        colorpicker.render({
+            elem: '#color1'
+            ,predefine: true
+            ,colors: ['#F00','#0F0','#00F','rgb(255, 69, 0)','rgba(255, 69, 0, 0.5)']
+        });
+    });
+
+
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+        //监听提交
+        form.on('submit(add)', function(data){
+            //alert(data.field);
+            $.ajax({
+                type:'post',
+                data:data.field,
+                dataType:'json',
+                url:"{:url('admin/system/saveSystem')}",
+                success:function (data) {
+                    if (data.code == 0){
+                        layer.alert(data.message, {icon: 6});
+                    }else{
+                        layer.alert(data.message, {icon: 5});
+                        return false;
+                    }
+                }
+            })
+        });
+    });
+</script>
+</body>
+
+</html>

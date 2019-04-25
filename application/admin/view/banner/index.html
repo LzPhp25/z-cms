@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">文章管理</a>
+        <a>
+          <cite>文章列表</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <xblock>
+        <button class="layui-btn layui-btn-normal"  onclick="x_admin_show('添加','{:url("admin/banner/add")}')" >增加</button>
+        <button class="layui-btn layui-btn-primary" onclick="delAll()">批量删除</button>
+        <span class="x-right" style="line-height:40px">共有数据：{$count|default=0} 条</span>
+    </xblock>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th width="30">
+                <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+            </th>
+            <th width="20">ID</th>
+            <th>banner图</th>
+            <th width="240">banner链接</th>
+            <th width="100">banner位置</th>
+            <th width="80">操作</th>
+        </thead>
+        <tbody>
+        {volist name='bannerList' id='list'}
+        <tr>
+            <td>
+                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='{$list.id}'><i class="layui-icon">&#xe605;</i></div>
+            </td>
+            <td>{$list.id}</td>
+            <td style="text-align: center">
+                <img style="height: 100px" src="/{$list.banner_img}"/>
+            </td>
+            <td style="text-align: center">
+                {if $list.banner_link}
+                <a target="_blank" href="{$list.banner_link}">{$list.banner_link}</a>
+                {else}
+                暂无连接
+                {/if}
+            </td>
+            <td style="text-align: center" width="60">
+                {if $list.cate_name}
+                    {$list.cate_name}
+                {else}
+                    首页
+                {/if}
+            </td>
+            <td class="td-manage">
+                <a title="编辑"  onclick="x_admin_show('编辑','{:url("admin/banner/edit",["id"=>$list.id])}')" href="javascript:;">
+                <i class="layui-icon">&#xe642;</i>
+                </a>
+                <a title="删除" onclick="member_del(this,'{$list.id}')" href="javascript:;">
+                    <i class="layui-icon">&#xe640;</i>
+                </a>
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    <div class="page">
+    </div>
+</div>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+    /*用户-删除*/
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            //发异步删除数据
+            $.ajax({
+                type:'post',
+                data:{id:id},
+                dataType:'json',
+                url:"{:url('admin/banner/delBanner')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!',{icon:1,time:1000});
+                    }
+                }
+            });
+        });
+    }
+    //批量删除
+    function delAll (argument) {
+        var data = tableCheck.getData();
+        //console.log(data);
+        layer.confirm('确认要删除吗？'+data,function(index){
+            $.ajax({
+                type:'post',
+                data:{id:data},
+                dataType:'json',
+                url:"{:url('admin/banner/delBanner')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                        layer.msg('删除成功', {icon: 1});
+                        $(".layui-form-checked").not('.header').parents('tr').remove();
+                    }
+                }
+            });
+        });
+    }
+    //批量审核
+    function reviewedAll() {
+        var data = tableCheck.getData();
+        layer.confirm('确认要执行操作吗？'+data,function(index){
+            $.ajax({
+                type:'post',
+                data:{id:data},
+                dataType:'json',
+                url:"{:url('admin/article/reviewedAll')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                        layer.msg(data.message, {icon: 1});
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    }
+    //批量热门
+    function  hotAll() {
+        var data = tableCheck.getData();
+        layer.confirm('确认要执行操作吗？'+data,function(index){
+            $.ajax({
+                type:'post',
+                data:{id:data},
+                dataType:'json',
+                url:"{:url('admin/article/hotAll')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    }
+    function  cancelHotAll() {
+        var data = tableCheck.getData();
+        layer.confirm('确认要执行操作吗？'+data,function(index){
+            $.ajax({
+                type:'post',
+                data:{id:data},
+                dataType:'json',
+                url:"{:url('admin/article/cancelHotAll')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    }
+
+</script>
+</body>
+
+</html>

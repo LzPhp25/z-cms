@@ -1,0 +1,183 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">留言管理</a>
+        <a>
+          <cite>留言列表</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <xblock>
+        <button class="layui-btn layui-btn-primary" onclick="delAll()">批量删除</button>
+    </xblock>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>
+                <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+            </th>
+            <th>ID</th>
+            <th>标题</th>
+            <th>电话</th>
+            <th>留言内容</th>
+            <th>PC/mobile</th>
+            <th>展示</th>
+            <th>留言时间</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+        {volist name='$messageList' id='list'}
+        <tr>
+            <td>
+                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='{$list.id}'><i class="layui-icon">&#xe605;</i></div>
+            </td>
+            <td>{$list.id}</td>
+            <td>{$list.title}</td>
+            <td>
+               {$list.phone}
+            </td>
+            <td width="600"> {$list.content}
+            </td>
+            <td>{if $list.type_id == 1}
+                电脑端
+                {else}
+                手机端
+                {/if}</td>
+            <td class="td-status">
+                <span   show = "{$list.show}"  mid="{$list.id}"  id="reviewed_{$list.id}"   class="layui-btn {if $list.show == 1}layui-btn-normal{else}layui-btn-danger{/if}   layui-btn-mini reviewed">
+                    {if $list.show == 1}显示{else}隐藏{/if}
+                </span>
+            </td>
+            <td>
+                {$list.create_time|date='Y-m-d H:i:s'}
+            </td>
+            <td class="td-manage">
+                <a title="删除" onclick="member_del(this,'{$list.id}')" href="javascript:;">
+                    <i class="layui-icon">&#xe640;</i>
+                </a>
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    <div class="page">
+    </div>
+</div>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+    //审核
+    $('.reviewed').click(function () {
+        var show = $(this).attr('show');
+        var mid = $(this).attr('mid');
+        $.ajax({
+            type:'post',
+            data:{mid:mid,show:show},
+            dataType:'json',
+            url:"{:url('admin/message/changeMessageShow')}",
+            success:function (data) {
+                if (data.code == 200) {
+                    layer.msg('操作成功！', {icon: 1});
+                    window.location.reload();
+                }else {
+                    layer.msg('操作成功！', {icon: 1});
+                    window.location.reload();
+                }
+            }
+        });
+    });
+
+    /*用户-删除*/
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            //发异步删除数据
+            $.ajax({
+                type:'post',
+                data:{id:id},
+                dataType:'json',
+                url:"{:url('admin/message/delMessage')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                            $(obj).parents("tr").remove();
+                            layer.msg('已删除!',{icon:1,time:1000});
+                    }
+                }
+            });
+        });
+    }
+    //批量删除
+    function delAll (argument) {
+        var data = tableCheck.getData();
+        //console.log(data);
+        layer.confirm('确认要删除吗？'+data,function(index){
+            $.ajax({
+                type:'post',
+                data:{id:data},
+                dataType:'json',
+                url:"{:url('admin/message/delMessage')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                        layer.msg('删除成功', {icon: 1});
+                        $(".layui-form-checked").not('.header').parents('tr').remove();
+                    }
+                }
+            });
+        });
+    }
+    //批量审核
+    function reviewedAll() {
+        var data = tableCheck.getData();
+        layer.confirm('确认要执行操作吗？'+data,function(index){
+            $.ajax({
+                type:'post',
+                data:{id:data},
+                dataType:'json',
+                url:"{:url('admin/article/reviewedAll')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                        layer.msg(data.message, {icon: 1});
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    }
+</script>
+</body>
+
+</html>

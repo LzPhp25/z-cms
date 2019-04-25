@@ -1,0 +1,298 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">文章管理</a>
+        <a>
+          <cite>文章列表</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <form class="layui-form layui-col-md12 x-so">
+            <input class="layui-input"  value="{$Reques.param.get.start|default=''}"  autocomplete="off" placeholder="开始日" name="start" id="start">
+            <input class="layui-input" value=""   autocomplete="off" placeholder="截止日" name="end" id="end">
+            <input type="text" name="title"  placeholder="请输入标题" value=""  autocomplete="off" class="layui-input">
+            <button class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon">&#xe615;</i></button>
+        </form>
+    </div>
+    <xblock>
+        <button class="layui-btn" onclick="sortArticle()">一键排序</button>
+        <button class="layui-btn layui-btn-primary" onclick="delAll()">批量删除</button>
+        <button class="layui-btn layui-btn-normal" onclick="reviewedAll()">批量审核</button>
+        <button class="layui-btn layui-btn-danger" onclick="hotAll()">批量热门</button>
+        <button class="layui-btn layui-btn-warm" onclick="cancelHotAll()">取消热门</button>
+        <button class="layui-btn" onclick="x_admin_show('添加','{:url("admin/article/add",["cid"=>$cid])}')">添加</button>
+        <button class="layui-btn" onclick="javascript:history.go(-1)">返回</button>
+        <span class="x-right" style="line-height:40px">共有数据：{$count|default=0} 条</span>
+    </xblock>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>
+                <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+            </th>
+            <th>ID</th>
+            <th>排序</th>
+            <th>文章标题</th>
+            <th>文章属性</th>
+            <th>文章封面</th>
+            <th>栏目名称</th>
+            <th>创建时间</th>
+            <th>状态</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+        {volist name='articleList' id='list'}
+        <tr>
+            <td>
+                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='{$list.id}'><i class="layui-icon">&#xe605;</i></div>
+            </td>
+            <td>{$list.id}</td>
+            <td width="50"><input  style="width: 50px;height: 30px;text-align: center;line-height: 30px"  id="sort_{$list.id}" type="text" value="{$list.sort}"></td>
+            <td>{$list.title}</td>
+            <td style="text-align: center">{if $list.attr}
+                    <?php   $arrList = explode(',',$list['attr']);
+                        foreach($arrList as $key=>$value):
+                        if($value == 'r'): echo '<span style="background-color: #FFB800;color: #fff;padding: 3px 3px;">推荐</span>&nbsp;&nbsp;&nbsp;';
+                        elseif($value == 'h'): echo '<span style="background-color: #FF5722;color: #fff;padding: 3px 3px;">热门</span>&nbsp;&nbsp;';
+                        elseif($value == 't'): echo '<span style="background-color: #01AAED;color: #fff;padding: 3px 3px;">头条</span>&nbsp;&nbsp;';
+                        elseif($value == 's'): echo '<span style="background-color: #2F4056;color: #fff;padding: 3px 3px;">置顶</span>';
+                        endif;
+                    ?>
+                    <?php endforeach; ?>
+                {else}
+                <p style="text-align: center;color: #DDDDDD;" class="layui-text">暂无属性</p>
+                {/if}
+            </td>
+            <td style="text-align: center" width="60">{if $list.picture}
+                <a target="_blank" href="/{$list.picture}"><img style="height: 50px;" layui-upload-img class="layui-upload-img" src="/{$list.picture}"></a>{else}
+                <span style="background-color: #393D49;color: #fff;padding: 3px 3px;">暂无图片</span>{/if}</td>
+            <td></td>
+            <td>{$list.create_time|date='Y-m-d H:i:s'}</td>
+            <td class="td-status">
+                {if $list.reviewed == 1}
+                <span   reviewed = "{$list.reviewed}"  aid="{$list.id}"  id="reviewed_{$list.id}"   class="layui-btn layui-btn-normal layui-btn-mini reviewed">已审核</span>
+                {else}
+                <span  reviewed = "{$list.reviewed}"  aid="{$list.id}"  id="reviewed_{$list.id}"  class="layui-btn layui-btn-danger layui-btn-mini reviewed">未审核</span>
+                {/if}
+            </td>
+            <td class="td-manage">
+                <a title="编辑"  onclick="x_admin_show('编辑','{:url("admin/article/edit",["id"=>$list.id])}')" href="javascript:;">
+                    <i class="layui-icon">&#xe642;</i>
+                </a>
+                <a title="删除" onclick="member_del(this,'{$list.id}')" href="javascript:;">
+                    <i class="layui-icon">&#xe640;</i>
+                </a>
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    <div class="page">
+        <div id="test1"></div>
+    </div>
+</div>
+<script>
+    layui.use('laypage', function(){
+        var laypage = layui.laypage;
+        var url = "/admin/article/index/"
+        var cid = {$Request.param.id}
+        //执行一个laypage实例
+        laypage.render({
+            elem: 'test1' //注意，这里的 test1 是 ID，不用加 # 号
+            ,count: {$total} //数据总数，从服务端得到
+            ,curr:{$curr}
+            ,jump:function (obj, first) {
+                //首次不执行
+                if(!first){
+                    location.href='/admin/article/index/id/'+cid +'/page/'+e.curr;
+                }
+            }
+        });
+    });
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+    //审核
+    $('.reviewed').click(function () {
+        var reviewed = $(this).attr('reviewed');
+        var aid = $(this).attr('aid');
+        $.ajax({
+            type:'post',
+            data:{aid:aid,reviewed:reviewed},
+            dataType:'json',
+            url:"{:url('admin/article/reviewedArticle')}",
+            success:function (data) {
+                if (data.code == 200) {
+                    layer.msg('操作成功！', {icon: 1});
+                    window.location.reload();
+                }else {
+                    layer.msg('操作成功！', {icon: 1});
+                    window.location.reload();
+                }
+            }
+        });
+    });
+    function sortArticle(argument) {
+        var data = tableCheck.getData();
+        var str = "" ;
+        for (let i=0; i<data.length;i++){
+            let val = Number($("#sort_"+data[i]).val());
+            if (isNaN(val)) {
+                alert("请填写正确的阿拉伯数字");
+                return false;
+            }
+           // console.log(data[i] + '-'+val);
+            str += data[i] + ':'+val +",";
+            //arr[data[i]] = val ;
+        }
+        if (str == ""){
+            layer.msg('请选中要排序的文章!',{icon:5,time:1000});
+            return false;
+        }
+
+        str = str.substring(0, str.length-1);
+        //console.log();
+        $.ajax({
+            type:'post',
+            data:{sortData:str},
+            dataType:'json',
+            url:"{:url('admin/article/sort')}",
+            success:function (data) {
+                if (data.code == 200) {
+                    // $(obj).parents("tr").remove();
+                     layer.msg('排序成功！',{icon:1,time:1000}, function () {
+                         window.location.reload();
+                     });
+
+                }
+            }
+        })
+    }
+    /*用户-删除*/
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            //发异步删除数据
+            $.ajax({
+                type:'post',
+                data:{id:id},
+                dataType:'json',
+                url:"{:url('admin/article/delArticle')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                            $(obj).parents("tr").remove();
+                            layer.msg('已删除!',{icon:1,time:1000});
+                    }
+                }
+            });
+        });
+    }
+    //批量删除
+    function delAll (argument) {
+        var data = tableCheck.getData();
+        //console.log(data);
+        layer.confirm('确认要删除吗？'+data,function(index){
+            $.ajax({
+                type:'post',
+                data:{id:data},
+                dataType:'json',
+                url:"{:url('admin/article/delArticle')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                        layer.msg('删除成功', {icon: 1});
+                        $(".layui-form-checked").not('.header').parents('tr').remove();
+                    }
+                }
+            });
+        });
+    }
+    //批量审核
+    function reviewedAll() {
+        var data = tableCheck.getData();
+        layer.confirm('确认要执行操作吗？'+data,function(index){
+            $.ajax({
+                type:'post',
+                data:{id:data},
+                dataType:'json',
+                url:"{:url('admin/article/reviewedAll')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                        layer.msg(data.message, {icon: 1});
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    }
+    //批量热门
+    function  hotAll() {
+        var data = tableCheck.getData();
+        layer.confirm('确认要执行操作吗？'+data,function(index){
+            $.ajax({
+                type:'post',
+                data:{id:data},
+                dataType:'json',
+                url:"{:url('admin/article/hotAll')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    }
+    function  cancelHotAll() {
+        var data = tableCheck.getData();
+        layer.confirm('确认要执行操作吗？'+data,function(index){
+            $.ajax({
+                type:'post',
+                data:{id:data},
+                dataType:'json',
+                url:"{:url('admin/article/cancelHotAll')}",
+                success:function (data) {
+                    if (data.code == 200) {
+                        window.location.reload();
+                    }
+                }
+            });
+        });
+    }
+
+</script>
+</body>
+
+</html>

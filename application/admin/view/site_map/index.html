@@ -1,0 +1,128 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">插件管理</a>
+        <a>
+          <cite>sitemap</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <fieldset class="layui-elem-field">
+        <legend>网站地图 - sitemap</legend>
+        <div class="layui-field-box">
+            Google、雅虎、和微软都支持一个被称为xml网站地图（xml Sitemaps）的协议，而百度Sitemap是指百度支持的收录标准，在原有协议上做出了扩展。百度sitemap的作用是通过Sitemap告诉百度蜘蛛全面的站点链接，优化自己的网站。百度Sitemap分为三种格式：txt文本格式、xml格式、Sitemap索引格式。本网站采用的是通用的xml格式。
+        </div>
+    </fieldset>
+
+        <div style="width: 100%;height: 500px;margin-top: 30px;display: flex;border: 1px solid #ccc;flex-direction: column">
+            <div class="layui-field-box">
+                说明：生成的路径默认在网站的根目录下也就是public下
+            </div>
+            <form class="layui-form">
+                <div class="layui-form-item">
+                    <label for="page" class="layui-form-label">
+                     单页路由
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="page" name="page" required=""
+                               autocomplete="off" value="leaf" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="list" class="layui-form-label">
+                        列表路由
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="list" value="list"  name="list" required=""
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="article"   class="layui-form-label">
+                       内容路由
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="article"  value="article"    name="article" required=""
+                               autocomplete="off" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="L_email" class="layui-form-label">
+                       协议
+                    </label>
+                    <div class="layui-input-inline">
+                        <select name="agree" lay-verify="required">
+                            <option value="http://">http</option>
+                            <option value="https://">https</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label for="url" class="layui-form-label">
+                       域名
+                    </label>
+                    <div class="layui-input-inline">
+                        <input type="text" id="url" disabled name="url" required=""
+                               autocomplete="off"  value="<?php echo $_SERVER['SERVER_NAME']; ?>" class="layui-input">
+                    </div>
+                </div>
+                <div class="layui-form-item">
+                    <label  class="layui-form-label">
+                    </label>
+                    <button  class="layui-btn" lay-filter="add" lay-submit="">
+                        增加
+                    </button>
+                </div>
+            </form>
+        </div>
+</div>
+    <script>
+        layui.use(['form','layer'], function(){
+            $ = layui.jquery;
+            var form = layui.form
+                ,layer = layui.layer;
+            //监听提交
+            form.on('submit(add)', function(data){
+                $.ajax({
+                    type:'post',
+                    data:data.field,
+                    dataType:'json',
+                    url:"{:url('admin/site_map/makeMap')}",
+                    success:function (data) {
+                        layer.msg(data.message,{icon:6});
+                    }
+                });
+
+            });
+
+
+        });
+    </script>
+</body>
+
+</html>

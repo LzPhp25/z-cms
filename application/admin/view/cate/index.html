@@ -1,0 +1,233 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">栏目管理</a>
+        <a>
+          <cite>导航元素</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-row">
+        <button  onclick="x_admin_show('添加顶级栏目','{:url("admin/cate/add")}')"  class="layui-btn"  lay-submit="" lay-filter="sreach"><i class="layui-icon"></i>增加</button>
+    </div>
+    <blockquote class="layui-elem-quote">有子分类的前面加收缩图标<i class="layui-icon x-show" status='true'>&#xe623;</i>  |
+    只有栏目是列表类型的才可以添加文档  |    类似于“联系我们”等页面请在栏目中的栏目内容进行操作|复制栏目只会复制栏目不会复制栏目关联的数据 例如文章，轮播等.
+    </blockquote>
+    <xblock>
+        <button class="layui-btn layui-btn-danger " onclick="delAll()"><i class="layui-icon"></i>批量删除</button>
+        <button class="layui-btn layui-btn-primary " onclick="sort()">一键排序</button>
+        <span class="x-right" style="line-height:40px"></span>
+    </xblock>
+    <table id="idTest" class="layui-table layui-form">
+        <thead>
+        <tr>
+            <th width="20">
+                <div class="layui-unselect header layui-form-checkbox"   data-id='0'  lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
+            </th>
+            <th width="70">ID</th>
+            <th>栏目名</th>
+            <th width="50">排序</th>
+            <th width="50">状态</th>
+            <th width="380" >操作</th>
+        </thead>
+        <tbody class="x-cate">
+    {volist name='cateList' id='list'}
+        <tr cate-id='{$list.id}' fid='{$list.cate_pid}'>
+            <td>
+                <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='{$list.id}'>
+                    <i class="layui-icon">&#xe605;</i>
+                </div>
+            </td>
+            <td>{$list.id}</td>
+            <td>
+                {if $list['level']>0 }
+                <?php echo str_repeat('&nbsp;&nbsp;',$list['level']);  ?>|-
+                {/if}
+                {$list.cate_name}
+                {if $list.angle == 1}
+                <i class="layui-icon x-show" status='true'>&#xe623;</i>
+                {/if}
+            </td>
+            <td><input type="text" class="layui-input x-sort" id="sort_{$list.id}"   name="order[$list.id]" value="{$list.cate_sort}"></td>
+            <td>
+               <div style="width: 30px" class="status">
+                   <input status_id = "{$list.id}"  id="status_{$list.id}" lay-skin="switch" lay-text="显示|隐藏"   type="checkbox"  {if $list.cate_status == 1}  value="1"  checked="checked" {else}   value="0" {/if}  name="cate_status"  >
+               </div>
+            </td>
+            <td class="td-manage">
+                {if $list.temp_type == 1 && $list.angle != 1}
+                <a href="{:url('admin/article/index',['id'=>$list.id])}" target="_self"   class="layui-btn layui-btn-normal layui-btn-xs"><i class="layui-icon">&#xe63c;</i>文档</a>
+                {else}
+                <a href="javascript:;" class="layui-btn layui-btn-disabled layui-btn-xs"><i class="layui-icon">&#xe63c;</i>禁用</a>
+                {/if}
+                <button class="layui-btn layui-btn layui-btn-xs"  onclick="x_admin_show('编辑','{:url("admin/cate/edit",["id"=>$list.id])}')" ><i class="layui-icon">&#xe642;</i>编辑</button>
+                <button class="layui-btn layui-btn-warm layui-btn-xs"  onclick="x_admin_show('增加子栏目','{:url("admin/cate/addSonCate",["id"=>$list.id])}')" ><i class="layui-icon">&#xe642;</i>添加子栏目</button>
+                <button class="layui-btn-danger layui-btn layui-btn-xs"  onclick="member_del(this,'{$list.id}')" href="javascript:;" ><i class="layui-icon">&#xe640;</i>删除</button>
+                <a copy_id="{$list.id}" class="layui-btn layui-btn-primary layui-btn-xs copy"><i class="layui-icon">&#xe608;</i>复制</a>
+            </td>
+        </tr>
+{/volist}
+        </tbody>
+    </table>
+</div>
+<style type="text/css">
+
+</style>
+<script>
+    /*栏目-删除*/
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            //layer.msg(id,{icon:1,time:1000});
+            $.ajax({
+                type:'post',
+                data:{id:id},
+                dataType:'json',
+                url:"{:url('admin/cate/delete')}",
+                success:function (data) {
+                    if (data.code == 0){
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!',{icon:1,time:1000});
+                    }else{
+                        layer.alert(data.message, {icon: 5});
+                        return false;
+                    }
+                }
+            })
+            //发异步删除数据
+
+        });
+    }
+    function delAll (argument) {
+        var data = tableCheck.getData();
+        layer.confirm('确认要删除吗？'+data,function(index){
+            $.ajax({
+                type:'post',
+                data:{id:data},
+                dataType:'json',
+                url:"{:url('admin/cate/delete')}",
+                success:function (data) {
+                    if (data.code == 0){
+                        //alert(data.message);
+                        //捉到所有被选中的，发异步进行删除
+                        layer.msg('删除成功', {icon: 1});
+                        $(".layui-form-checked").not('.header').parents('tr').remove();
+                       // location.replace(location.href);
+                    }else{
+                        layer.alert(data.message, {icon: 5});
+                        return false;
+                    }
+                }
+            })
+
+        });
+    }
+
+    function sort() {
+        var data = tableCheck.getData();
+       if (data==""){
+           layer.msg('请选择要排序的栏目！');
+           return false;
+       }
+        var arr = new Array();
+        var g = /^[1-9]*[1-9][0-9]*$/;
+        for (let i=0;i<data.length; i++){
+            let sort = $('#sort_'+data[i]).val();
+            if (g.test(sort)==false){
+                layer.msg('请填写正整数！');
+                return false;
+            }
+            arr[data[i]]= sort ;
+        }
+       // console.log(arr);
+        $.ajax({
+            type:'post',
+            data:{sort:arr},
+            dataType:'json',
+            url:"{:url('admin/cate/sort')}",
+            success:function (data) {
+                if (data.code == 0){
+                    layer.alert(data.message, {icon: 6},function () {
+                        location.replace(location.href);
+                    });
+                }else{
+                    layer.alert(data.message, {icon: 5});
+                    return false;
+                }
+            }
+        })
+    }
+    //状态切换
+    $(".status").click(function () {
+        var checkBoxVal = $(this).find('input').val();
+        var status_id =  $(this).find('input').attr('status_id');
+        $.ajax({
+            type:'post',
+            data:{id:status_id,val:checkBoxVal},
+            dataType:'json',
+            url:"{:url('admin/cate/status')}",
+            success:function (data) {
+                if (data.data.status == 1){
+                    layer.msg(data.message, {icon: 6});
+                    $("#status_"+status_id).val(0);
+                    $("#status_"+status_id).attr('checked',false);
+                }
+                if (data.data.status == 0){
+                    layer.msg(data.message, {icon: 6});
+                    $("#status_"+status_id).val(1);
+                    $("#status_"+status_id).attr('checked',true);
+                }
+            }
+        })
+
+    });
+    //
+    $('.copy').click(function () {
+        var id = $(this).attr('copy_id');
+        $.ajax({
+            type:'post',
+            data:{id:id},
+            dataType:'json',
+            url:"{:url('admin/cate/copy')}",
+            success:function (data) {
+                if (data.code == 0){
+                    //alert(data.message);
+                    //捉到所有被选中的，发异步进行删除
+                    layer.msg('操作成功', {icon: 1},function () {
+                        location.replace(location.href);
+                    });
+
+                }
+            }
+        })
+
+    })
+
+</script>
+</body>
+
+</html>

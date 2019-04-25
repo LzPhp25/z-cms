@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">文章管理</a>
+        <a>
+          <cite>文章列表</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <div class="layui-btn-group demoTable">
+        <button class="layui-btn" data-type="getCheckData">删除选中行数据</button>
+        <button class="layui-btn" data-type="getCheckLength">获取选中数目</button>
+        <button class="layui-btn" data-type="isAll">验证是否全选</button>
+        <button class="layui-btn" onclick="x_admin_show('添加','{:url("admin/article/add",["cid"=>$cid])}')">添加</button>
+        <button class="layui-btn" onclick="javascript:history.go(-1)">返回</button>
+    </div>
+
+    <table class="layui-table" lay-data="{height:600, url:'/admin/article/getPage/id/{$cid}', page:true, id:'idTest'}" lay-filter="demo">
+        <thead>
+        <tr>
+            <th lay-data="{type:'checkbox', fixed: 'left'}"></th>
+            <th lay-data="{field:'id', width:80, sort: true, fixed: true}">ID</th>
+            <th lay-data="{field:'sort', width:80,edit:'text',sort: true}">排序</th>
+            <th lay-data="{field:'title', width:280}">标题</th>
+            <th lay-data="{field:'attr', width:200}">属性</th>
+            <th lay-data="{field:'picture', width:300}">封面图</th>
+            <th lay-data="{field:'cate', width:150}">栏目</th>
+            <th lay-data="{field:'click', width:120, sort: true}">点击量</th>
+            <th lay-data="{field:'create_time', width:180 ,sort: true}">创建时间</th>
+            <th lay-data="{fixed: 'right', width:178, align:'center', toolbar: '#barDemo'}"></th>
+        </tr>
+        </thead>
+    </table>
+
+    <script type="text/html" id="barDemo">
+        <a class="layui-btn layui-btn-primary layui-btn-xs" lay-event="detail">查看</a>
+        <a class="layui-btn layui-btn-xs" lay-event="edit">编辑</a>
+        <a class="layui-btn layui-btn-danger layui-btn-xs" lay-event="del">删除</a>
+    </script>
+</div>
+<script>
+    layui.use('table', function(){
+        var table = layui.table;
+        //监听表格复选框选择
+        table.on('checkbox(demo)', function(obj){
+            console.log(obj)
+        });
+        //监听工具条
+        table.on('tool(demo)', function(obj){
+            var data = obj.data;
+            if(obj.event === 'detail'){
+                layer.msg('ID：'+ data.id + ' 的查看操作');
+
+            } else if(obj.event === 'del'){
+                layer.confirm('真的删除行么', function(index){
+                    $.ajax({
+                        type:'post',
+                        data:{id:data.id},
+                        dataType:'json',
+                        url:"{:url('admin/article/delete')}",
+                        success:function (data) {
+                            if (data.code == 0){
+                                layer.msg(data.message, {icon: 6},function () {
+                                    obj.del();
+                                    layer.close(index);
+                                });
+                            }else{
+                                layer.alert(data.message, {icon: 5});
+                                return false;
+                            }
+                        }
+                    })
+                });
+            } else if(obj.event === 'edit'){
+                //layer.alert('编辑行：<br>'+ JSON.stringify(data.id))
+                let id = data.id;
+                console.log(id);
+                x_admin_show('编辑',"/admin/article/edit/id/"+data.id)
+            }
+        });
+        //监听单元格编辑
+        table.on('edit(demo)', function(obj){
+            var value = obj.value //得到修改后的值
+                ,data = obj.data //得到所在行所有键值
+                ,field = obj.field; //得到字段
+            var r = /^\+?[1-9][0-9]*$/;　　//正整数
+            var flag = r.test(value);
+           if (flag){
+              // layer.msg('[ID: '+ data.id +'] ' + field + ' 字段更改为：'+ value);
+               $.ajax({
+                   type:'post',
+                   data:{id:data.id,sort:value},
+                   dataType:'json',
+                   url:"{:url('admin/article/sort')}",
+                   success:function (data) {
+                       if (data.code == 0){
+                           layer.msg(data.message, {icon: 6},function () {
+                               location.replace(location.href);
+                           });
+                           return false;
+                       }else{
+                           layer.alert(data.message, {icon: 5});
+                           return false;
+                       }
+                   }
+               })
+
+           }else {
+               layer.msg('请填写正整数！');
+           }
+
+
+        });
+
+        var $ = layui.$, active = {
+            getCheckData: function(){ //获取选中数据
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+                var arr = new Array();
+                for (let i=0;i<data.length;i++){
+                    arr.push(data[i].id);
+                }
+                if (arr.length== 0){
+                    layer.msg("至少选择一条数据",{icon:5});
+                    return false;
+                }
+                layer.confirm('真的删除么', function(index){
+                    $.ajax({
+                        type:'post',
+                        data:{id:arr},
+                        dataType:'json',
+                        url:"{:url('admin/article/delete')}",
+                        success:function (data) {
+                            if (data.code == 0){
+                                layer.alert(data.message, {icon: 6},function () {
+                                    location.replace(location.href);
+                                });
+                            }else{
+                                layer.alert(data.message, {icon: 5});
+                                return false;
+                            }
+                        }
+                    })
+                });
+            }
+            ,getCheckLength: function(){ //获取选中数目
+                var checkStatus = table.checkStatus('idTest')
+                    ,data = checkStatus.data;
+                layer.msg('选中了：'+ data.length + ' 个');
+            }
+            ,isAll: function(){ //验证是否全选
+                var checkStatus = table.checkStatus('idTest');
+                layer.msg(checkStatus.isAll ? '全选': '未全选')
+            }
+        };
+
+        $('.demoTable .layui-btn').on('click', function(){
+            var type = $(this).data('type');
+            active[type] ? active[type].call(this) : '';
+        });
+
+
+    });
+</script>
+</body>
+
+</html>

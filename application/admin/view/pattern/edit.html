@@ -1,0 +1,103 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="name" class="layui-form-label">
+                <span class="x-red">*</span>模型名称
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="name" name="name"  value="{$pattern.name}" required="" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>唯一
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="table_name" class="layui-form-label">
+                <span class="x-red">*</span>模型表
+            </label>
+            <div class="layui-input-inline">
+                <input type="text" id="table_name" name="table_name" value="{$pattern.table_name}"  required="" lay-verify="required"
+                       autocomplete="off" class="layui-input">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>唯一
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="status" class="layui-form-label">
+                <span class="x-red">*</span>状态
+            </label>
+            <div class="layui-input-inline">
+                <input type="checkbox" name="status"  value="1" {if $pattern.status == 1} checked {/if} id="status" lay-skin="switch" lay-text="ON|OFF">
+            </div>
+        </div>
+        <input type="hidden" name="__token__" value="{$Request.token}" />
+        <input type="hidden" name="id" value="{$pattern.id}">
+        <input type="hidden" name="old_table" value="{$pattern.table_name}">
+        <div class="layui-form-item">
+            <label for="L_repass" class="layui-form-label">
+            </label>
+            <button type="button"  class="layui-btn" lay-filter="add" lay-submit="">
+                增加
+            </button>
+        </div>
+    </form>
+</div>
+<script>
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+        //监听提交
+        form.on('submit(add)', function(data){
+            //console.log(data);
+            $.ajax({
+                type:'post',
+                data:data.field,
+                dataType:'json',
+                url:"{:url('admin/pattern/edit')}",
+                success:function (data) {
+                    if (data.code == 0){
+                        layer.alert(data.message, {icon: 6},function () {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                            return false;
+                        });
+                    }else{
+                        layer.alert(data.message, {icon: 5});
+                        return false;
+                    }
+                }
+            })
+        });
+
+
+    });
+</script>
+</body>
+
+</html>

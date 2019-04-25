@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">留言管理</a>
+        <a>
+          <cite>报名列表</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <table id="demo" lay-filter="test"></table>
+    <script>
+        layui.use('table', function(){
+            var table = layui.table;
+
+            //第一个实例
+            table.render({
+                elem: '#demo'
+                ,title: '报名表'
+                ,limit:15
+                ,height:670
+                ,url: '{:url("admin/register/table")}' //数据接口
+                ,page: true //开启分页
+                ,cols: [[ //表头
+                    {field: 'id', title: 'ID', width:80, sort: true, fixed: 'left'}
+                    ,{field: 'name', title: '姓名', width:100}
+                    ,{field: 'phone', title: '电话', width:150, sort: true}
+                    ,{field: 'father_num', title: '父亲电话', width:150}
+                    ,{field: 'mother_num', title: '母亲电话', width: 150}
+                    ,{field: 'school', title: '就读学校', width: 400, sort: true}
+                    ,{field: 'garden', title: '年级', width: 80, sort: true}
+                    ,{field: 'draw', title: '有无基础', width: 100}
+                    ,{field: 'mark', title: '文化课分数', width: 120, sort: true}
+                    ,{field: 'card', title: '身份证号', width: 220, sort: true}
+                ]]
+            });
+
+        });
+    </script>
+</div>
+</body>
+
+</html>

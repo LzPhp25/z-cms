@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    {include file='public/ueditor'}
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+</head>
+<body>
+<div class="x-body">
+    <form class="layui-form">
+        <div class="layui-form-item">
+            <label for="test1" class="layui-form-label">
+                <span class="x-red">*</span>banner上传
+            </label>
+            <div class="layui-input-inline">
+                <button type="button" class="layui-btn" id="test1">
+                    <i class="layui-icon">&#xe67c;</i>上传图片
+                </button>
+                <div class="layui-upload-list layui-input-inline ">
+                    <img style="height: 80px" class="layui-upload-img" src="/public/static/admin/images/pic.png"  id="demo1">
+                </div>
+                <input type="hidden" name="banner_img"  value="" id="up">
+            </div>
+            <div class="layui-form-mid layui-word-aux">
+                <span class="x-red">*</span>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="cate_id" class="layui-form-label">
+                <span class="x-red">*</span>banner位置
+            </label>
+            <div class="layui-input-inline">
+                <select name="cate_id" lay-verify="">
+                    <option value="0">首页</option>
+                    {if count($topCate)>0}
+                    {volist name='topCate' id='list'}
+                        <option value="{$list.id}">{$list.cate_name}</option>
+                    {/volist}
+                    {/if}
+                </select>
+            </div>
+        </div>
+        <div class="layui-form-item">
+            <label for="banner_link" class="layui-form-label">
+                <span class="x-red">*</span>banner链接
+            </label>
+            <div class="layui-input-inline">
+                <input   style="width: 500px"  placeholder="http://"  type="text" id="banner_link" name="banner_link"  autocomplete="off" class="layui-input">
+            </div>
+        </div>
+</div>
+
+<div class="layui-form-item">
+    <label for="L_repass" class="layui-form-label">
+    </label>
+    <button type="button"  class="layui-btn" lay-filter="add" lay-submit="">
+        增加
+    </button>
+</div>
+</form>
+</div>
+<script>
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+        //监听提交
+        form.on('submit(add)', function(data){
+            //console.log(data);
+            var cateData = $('.layui-form').serialize();
+            $.ajax({
+                type:'post',
+                data:cateData,
+                dataType:'json',
+                url:"{:url('admin/banner/addBanner')}",
+                success:function (data) {
+                    if (data.code == 200){
+                        layer.alert(data.message, {icon: 6},function () {
+                            // 获得frame索引
+                            var index = parent.layer.getFrameIndex(window.name);
+                            //关闭当前frame
+                            parent.layer.close(index);
+                            return false;
+                        });
+                    }else{
+                        layer.alert(data.message, {icon: 5});
+                        return false;
+                    }
+                }
+            })
+        });
+    });
+
+    layui.use('upload', function(){
+        var upload = layui.upload;
+        //执行实例
+        var uploadInst = upload.render({
+            elem: '#test1' //绑定元素
+            ,url: "{:url('admin/banner/upload')}" //上传接口
+            ,accept: 'images' //允许上传的文件类型
+            ,size: 2000 //最大允许上传的文件大小
+            ,field:'image'
+            ,done: function(res){
+                //上传完毕回调
+                if (res.code == 200){
+                    layer.msg('上传成功！',{icon: 6,time:1000});
+                    $('#demo1').attr('src', '/'+res.img);
+                    $('#up').val(res.img);
+                }
+            }
+            ,error: function(){
+                //请求异常回调
+            }
+        });
+    });
+
+
+</script>
+</body>
+
+</html>

@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>后台管理</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+    <style>
+        th td {
+            text-align: center;
+        }
+    </style>
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+       系统设置 》 字段列表
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <xblock>
+        <button class="layui-btn" onclick="x_admin_show('添加字段','{:url("admin/config_field/addField")}')">添加</button>
+        <span class="x-right" style="line-height:40px">共有数据：{$count|default=0} 条</span>
+    </xblock>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>字段名（中）</th>
+            <th>字段名（英）</th>
+            <th>字段值</th>
+            <th>可选值（用于selected、checkbox。radio）</th>
+            <th>字段类型</th>
+            <th>添加时间</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+        {volist name='fieldList' id='list'}
+        <tr>
+            <td>{$list.id}</td>
+            <td> {$list.cn_name}</td>
+            <td>{$list.en_name}</td>
+            <td>
+                {$list.value}
+            </td>
+            <td>{$list.values}</td>
+            <td>{if $list.field_type == 1} 输入框
+                {elseif  $list.field_type == 2 }单选按钮
+                {elseif  $list.field_type == 3 }复选框
+                {elseif  $list.field_type == 4 }下拉菜单
+                {elseif  $list.field_type == 5 }文本域
+                {elseif  $list.field_type == 6 }上传图片
+                {elseif  $list.field_type == 7 }上传文件
+                {/if}
+            </td>
+            <td>{$list.create_time}</td>
+            <td class="td-manage">
+                <button  class="layui-btn  layui-btn-normal"   onclick="x_admin_show('编辑','{:url("admin/config_field/editField",["id"=>$list.id])}')" > 编辑  <i class="layui-icon">&#xe642;</i> </button>
+                <button  class="layui-btn {if  $list.flexd == 1} layui-btn-danger{else}layui-btn-disabled{/if}" {if $list.flexd == 1}  onclick="member_del(this,'{$list.id}')" {/if} > 删除 <i class="layui-icon">&#xe640;</i> </button>
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+    <div class="page">
+            {$fieldList|raw}
+    </div>
+</div>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+
+    /*用户-删除*/
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            //发异步删除数据
+            $.ajax({
+                type:'post',
+                data:{id:id},
+                dataType:'json',
+                url:"{:url('admin/config_field/delete')}",
+                success:function (data) {
+                    if (data.code == 0) {
+                        $(obj).parents("tr").remove();
+                        layer.msg('已删除!',{icon:1,time:1000});
+                    }else{
+                        layer.msg(data.message,{icon:1,time:1000});
+                    }
+                }
+            });
+        });
+    }
+
+</script>
+</body>
+
+</html>

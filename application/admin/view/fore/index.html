@@ -1,0 +1,93 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">模板管理</a>
+        <a>
+          <cite>模板选择</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <fieldset class="layui-elem-field">
+        <legend>目录结构 </legend>
+        <div class="layui-field-box">
+            <p>template &nbsp;&nbsp;&nbsp; //模板文件夹</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;|-muban  &nbsp;&nbsp;&nbsp; //自定义模板文件夹</span></p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-muban.png  &nbsp;&nbsp;&nbsp;//模板预览图muban.png</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-wap  &nbsp;&nbsp;&nbsp;//手机端</p>
+            <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;|-mobile  &nbsp;&nbsp;&nbsp;//电脑端</p>
+            <p></p>
+
+        </div>
+    </fieldset>
+    <form class="layui-form" >
+    <div style="width: 100%;display: flex;flex-direction: row">
+        {volist name='fore' id='list'}
+                <div style="width: 380px;height: 390px;display: flex;flex-direction: column;align-items: center;margin: 5px 5px;border: #ccc solid 1px">
+                    <div>
+                        <img style="width: 380px;height: 350px;border-bottom: #ccc solid 1px" src="/template/{$list}/{$list}.png">
+                    </div>
+                    <div ><input type="radio" name="fore"  {if $name == $list} checked {/if}   value="{$list}" title="{$list}"></div>
+
+                </div>
+        {/volist}
+    </div>
+        <div style="margin-top: 50px">
+            <div class="layui-input-block">
+                <button class="layui-btn" lay-submit lay-filter="add">立即提交</button>
+            </div>
+        </div>
+    </form>
+
+</div>
+<script>
+    layui.use(['form','layer'], function(){
+        $ = layui.jquery;
+        var form = layui.form
+            ,layer = layui.layer;
+        //监听提交
+        form.on('submit(add)', function(data){
+            $.ajax({
+                type:'post',
+                data:data.field,
+                dataType:'json',
+                url:"{:url('admin/fore/setFore')}",
+                success:function (data) {
+                    if (data.code == 0){
+                        layer.msg(data.message, {icon: 6});
+                    }else{
+                        layer.msg(data.message, {icon: 5});
+                        return false;
+                    }
+                }
+            })
+        });
+    });
+
+</script>
+</body>
+
+</html>

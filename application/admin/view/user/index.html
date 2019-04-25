@@ -1,0 +1,159 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>网站后台</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">管理员管理</a>
+        <a>
+          <cite>管理员列表</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <xblock>
+        <button class="layui-btn" onclick="x_admin_show('添加用户','{:url("admin/user/add")}',600,500)"><i class="layui-icon"></i>添加</button>
+        <span class="x-right" style="line-height:40px">共有数据： 条</span>
+    </xblock>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>ID</th>
+            <th>登录名</th>
+            <th>登录次数</th>
+            <th>登录IP</th>
+            <th>加入时间</th>
+            <th>状态</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+        {volist name='user' id='list'}
+        <tr id="tr_{$list.id}">
+            <td>{$list.id}</td>
+            <td>{$list.username}</td>
+            <td>{$list.login_count}</td>
+            <td>{$list.login_ip}</td>
+            <td>{$list.create_time}</td>
+            <td class="td-status">
+                {if $list.status == 1}
+                <span class="layui-btn layui-btn-normal layui-btn-mini">启用</span>
+                {else}
+                <span class="layui-btn layui-btn-normal layui-btn-mini layui-btn-disabled">停用</span>
+                {/if}
+            </td>
+            <td class="td-manage">
+                <a onclick="member_stop(this,{$list.id})" href="javascript:;"  title="{if $list.status == 1}启用{else}停用{/if}">
+                    <i class="layui-icon">&#xe601;</i>
+                </a>
+                <a title="编辑"  onclick="x_admin_show('编辑','{:url("admin/user/edit",["id"=>$list.id])}',600,500)" href="javascript:;">
+                    <i class="layui-icon">&#xe642;</i>
+                </a>
+                <a title="删除" onclick="member_del(this,'{$list.id}')" href="javascript:;">
+                    <i class="layui-icon">&#xe640;</i>
+                </a>
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+<script>
+    layui.use('laydate', function(){
+        var laydate = layui.laydate;
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#start' //指定元素
+        });
+
+        //执行一个laydate实例
+        laydate.render({
+            elem: '#end' //指定元素
+        });
+    });
+
+    /*用户-停用*/
+    function member_stop(obj,id){
+        layer.confirm('确认要执行吗？',function(index){
+            if($(obj).attr('title')=='启用'){
+                //发异步把用户状态进行更改
+                $.ajax({
+                    type:'post',
+                    data:{id:id,status:0},
+                    dataType:'json',
+                    url:"{:url('admin/user/status')}",
+                    success:function (data) {
+                        if (data.code == 0) {
+                            $(obj).attr('title','停用')
+                            $(obj).find('i').html('&#xe62f;');
+                            $(obj).parents("tr").find(".td-status").find('span').addClass('layui-btn-disabled').html('停用');
+                            layer.msg('已停用!',{icon: 5,time:1000});
+                        }else{
+                            layer.msg(data.message,{icon: 5,time:1000});
+                        }
+                    }
+                });
+            }else{
+                $.ajax({
+                    type:'post',
+                    data:{id:id,status:1},
+                    dataType:'json',
+                    url:"{:url('admin/user/status')}",
+                    success:function (data) {
+                        if (data.code == 0) {
+                            $(obj).attr('title','启用')
+                            $(obj).find('i').html('&#xe601;');
+                            $(obj).parents("tr").find(".td-status").find('span').removeClass('layui-btn-disabled').html('启用');
+                            layer.msg('已启用!',{icon: 6,time:1000});
+                        }else{
+                            layer.msg(data.message,{icon: 5,time:1000});
+                        }
+                    }
+                });
+            }
+        });
+    }
+
+    /*用户-删除*/
+    function member_del(obj,id){
+        layer.confirm('确认要删除吗？',function(index){
+            //发异步删除数据
+            $.ajax({
+                type:'post',
+                data:{id:id},
+                dataType:'json',
+                url:"{:url('admin/user/delete')}",
+                success:function (data) {
+                    if (data.code == 0) {
+                            $(obj).parents("tr").remove();
+                            layer.msg('已删除!',{icon:1,time:1000});
+                            $("#tr"+id).remove();
+                    }
+                }
+            });
+        });
+    }
+</script>
+</body>
+
+</html>

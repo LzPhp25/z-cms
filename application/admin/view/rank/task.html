@@ -1,0 +1,91 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <script type="text/javascript" src="__ADMIN__js/jquery.jqprint-0.3.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="https://cdn.staticfile.org/html5shiv/r29/html5.min.js"></script>
+    <script src="https://cdn.staticfile.org/respond.js/1.4.2/respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">插件管理</a>
+        <a>
+          <cite>百度PC排名</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <fieldset class="layui-elem-field">
+        <legend>百度PC排名 </legend>
+        <div class="layui-field-box">
+            本功能基于站长工具接口开发，排名可能与实际不符，最终结果以实际为主
+        </div>
+    </fieldset>
+
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th>taskID</th>
+            <th>网址</th>
+            <th>关键词</th>
+            <th>创建时间</th>
+            <th>操作</th>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{$TaskID}<input type="hidden" id="TaskID" name="TaskID" value="{$TaskID}"></td>
+            <td>{$web}</td>
+            <td>{$words}</td>
+            <td><?php echo date('Y-m-d H:i:s');  ?></td>
+            <td><button id="toDo"  class="layui-btn ">执行</button></td>
+        </tr>
+        </tbody>
+    </table>
+    <div style="width: 100px"><button id="pdf" class="layui-btn layui-btn-warm layui-btn-disabled">打印</button></div>
+    <div id="res"></div>
+</div>
+    <script>
+        $('#pdf').click(function () {
+            window.print();
+        })
+        $('#toDo').click(function () {
+            var TaskID = $('#TaskID').val();
+            $.ajax({
+                type:'post',
+                data:{TaskID:TaskID},
+                dataType:'json',
+                url:"{:url('admin/rank/rankList')}",
+                success:function (data) {
+                    if (data.code == 1){
+                        layer.msg(data.message);
+                    }else{
+                        $('#res').html(data);
+                        $('#toDo').addClass('layui-btn-disabled');
+                        $('#pdf').removeClass('layui-btn-disabled');
+                    }
+                }
+            });
+
+        })
+    </script>
+</body>
+
+</html>
