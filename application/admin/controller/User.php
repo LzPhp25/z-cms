@@ -16,7 +16,7 @@ use think\facade\Session;
 class User extends BaseController
 {
     protected $beforeActionList = [
-        'auth'=>['index'],
+        'auth'=>['only'=>'index'],
     ];
     public function index()
     {
@@ -87,7 +87,9 @@ class User extends BaseController
         if ($id == 1){
             return backInfo(1, '不能删除此管理员！',[], 200);
         }
-        if ($id == Session::get('uid')){
+        $user = Session::get('user');
+        $uid = $user['id'];
+        if ($id == $uid){
             return backInfo(1, '不能删除此管理员！',[], 200);
         }
         $res = model('user')->delData($id);

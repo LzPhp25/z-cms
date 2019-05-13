@@ -10,8 +10,10 @@ namespace app\admin\common\Controller;
 use app\admin\common\lib\Auth;
 use app\admin\model\System;
 use think\Controller;
+use think\Db;
 use think\facade\Config;
 use think\facade\Request;
+use think\facade\Session;
 use think\Image;
 
 class BaseController extends Controller
@@ -22,7 +24,50 @@ class BaseController extends Controller
     {
         $this->system = System::get(1);
         $this->prefix = Config::get('database.prefix');
+        $this->noLogin();
+        $this->loginOverTime();
+        $this->loginIpValidate();
         parent::initialize();
+    }
+
+    public function loginOverTime()
+    {
+        if (Session::get('user_time') < time()){
+            Session::delete('user');
+            Session::delete('user_time');
+            Session::delete('login_ip');
+            $this->error('登陆超时，请重新登录！','admin/login/index');
+        }else{
+            Session::set('user_time',time()+3600);
+        }
+    }
+
+    public function noLogin()
+    {
+        if(!Session::has('user')){
+            $this->redirect('admin/login/index');
+        }
+    }
+
+    public function loginIpValidate()
+    {
+        $login_site = $this->system['login_site'];
+        if ($login_site == 1){
+            $user = Session::get('user');
+            $uid = $user['id'];
+            $login_ip = Db::name('user')->where('id',$uid)->value('login_ip');
+            if ($login_ip != Session::get('login_ip')){
+                //检验帐号异地登录下线
+                Session::delete('user');
+                Session::delete('user_time');
+                Session::delete('login_ip');
+                $this->error('该账户已【'.$login_ip.'】登录！','admin/login/index');
+            }else{
+                return true;
+            }
+        }else{
+            return true;
+        }
     }
 
     public function auth()
@@ -32,13 +77,15 @@ class BaseController extends Controller
         $action = Request::action();
         $node = $model.'/'.$controller.'/'.$action;
         //halt($node);
+        $user = Session::get('user');
+        $uid = $user['id'];
         $auth = new Auth();
-        $result = $auth->check($node, 100);
+        $result = $auth->check($node, $uid);
         if ($result){
             return true;
         }else{
             return true;
-            //return $this->redirect('admin/Index/auth');
+          //return $this->redirect('admin/Index/authPage');
         }
     }
 

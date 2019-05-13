@@ -13,7 +13,7 @@ use think\facade\Request;
 class System extends BaseController
 {
     protected $beforeActionList = [
-        'auth'=>['index'],
+        'auth'=>['only'=>'index'],
     ];
     public function index()
     {

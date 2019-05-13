@@ -16,7 +16,7 @@ use think\facade\Request;
 class Push extends BaseController
 {
     protected $beforeActionList = [
-        'auth'=>['index'],
+        'auth'=>['only'=>'index'],
     ];
     public function index()
     {

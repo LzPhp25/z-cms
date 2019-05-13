@@ -13,7 +13,6 @@ class PatternValidate extends BaseValidate
     protected $rule = [
         'name'=>'require|unique:pattern',
         'table_name'=>'require|alpha|unique:pattern',
-        '__token__'=>'require|token',
     ];
     protected $message = [
         'name.require'=>'请填写模型名称',

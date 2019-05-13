@@ -19,19 +19,13 @@
 <body class="login-bg">
 
 <div class="login layui-anim layui-anim-up">
-    <div class="message">管理登录</div>
+    <div class="message">欢迎使用Z-CMS</div>
     <div id="darkbannerwrap"></div>
 
     <form method="post" class="layui-form" >
         <input name="username" placeholder="用户名"  type="text" lay-verify="required" class="layui-input" >
         <hr class="hr15">
         <input name="password" lay-verify="required" placeholder="密码"  type="password" class="layui-input">
-        <hr class="hr15">
-        <div>
-           <div>
-                <img style="float: left;margin-right: 10px;cursor: pointer"  title="看不清可单击图片刷新" onclick="this.src='{:captcha_src()}?d='+Math.random();"   src="{:captcha_src()}" alt="captcha" /></div>
-                <input style="float: left;width: 170px"  name="captcha"  lay-verify="required" placeholder="验证码"  type="text" class="layui-input">
-           </div>
         <hr class="hr15">
         <input value="登录" lay-submit lay-filter="login" style="width:100%;" type="submit">
         <hr class="hr20" >
@@ -55,7 +49,7 @@
                     dataType:'json',
                     url:"{:url('admin/login/login')}",
                     success:function (data) {
-                        if (data.code == 200){
+                        if (data.code == 0){
                             layer.alert(data.message,{icon: 6},function (index) {
                                 window.location.href="{:url('admin/index/index')}";
                             });

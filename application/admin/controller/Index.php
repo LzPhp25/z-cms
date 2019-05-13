@@ -8,6 +8,8 @@
 
 namespace app\admin\controller;
 use app\admin\common\Controller\BaseController;
+use think\facade\Session;
+
 class Index extends BaseController
 {
     public function index()
@@ -18,8 +20,16 @@ class Index extends BaseController
     {
         return view();
     }
-    public function auth()
+    public function authPage()
     {
-        return view();
+        return view('auth');
+    }
+
+    public function loginOut()
+    {
+        Session::delete('user');
+        Session::delete('user_time');
+        Session::delete('login_time');
+        return backInfo(0, '退出登录！',[], 201);
     }
 }

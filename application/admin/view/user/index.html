@@ -148,6 +148,8 @@
                             $(obj).parents("tr").remove();
                             layer.msg('已删除!',{icon:1,time:1000});
                             $("#tr"+id).remove();
+                    }else {
+                        layer.msg(data.message,{icon:5,time:1000});
                     }
                 }
             });

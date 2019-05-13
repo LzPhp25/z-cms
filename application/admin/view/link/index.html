@@ -128,7 +128,7 @@
                 dataType:'json',
                 url:"{:url('admin/link/delAll')}",
                 success:function (data) {
-                    if (data.code == 200) {
+                    if (data.code == 0) {
                         layer.msg('删除成功', {icon: 1});
                         $(".layui-form-checked").not('.header').parents('tr').remove();
                     }

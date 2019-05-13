@@ -16,7 +16,7 @@ use think\facade\Request;
 class SiteMap extends BaseController
 {
     protected $beforeActionList = [
-        'auth'=>['index'],
+        'auth'=>['only'=>'index'],
     ];
     public function index()
     {

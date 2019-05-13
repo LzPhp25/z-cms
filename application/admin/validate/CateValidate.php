@@ -12,7 +12,6 @@ class CateValidate extends BaseValidate
 {
     protected $rule = [
         'cate_name'  => 'unique:cate',
-        '__token__'=>'require|token',
     ];
 
     protected $message=[

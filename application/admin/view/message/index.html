@@ -41,7 +41,7 @@
                 <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
             </th>
             <th>ID</th>
-            <th>标题</th>
+            <th>姓名</th>
             <th>电话</th>
             <th>留言内容</th>
             <th>PC/mobile</th>
@@ -56,7 +56,7 @@
                 <div class="layui-unselect layui-form-checkbox" lay-skin="primary" data-id='{$list.id}'><i class="layui-icon">&#xe605;</i></div>
             </td>
             <td>{$list.id}</td>
-            <td>{$list.title}</td>
+            <td>{$list.name}</td>
             <td>
                {$list.phone}
             </td>
@@ -111,11 +111,11 @@
             dataType:'json',
             url:"{:url('admin/message/changeMessageShow')}",
             success:function (data) {
-                if (data.code == 200) {
+                if (data.code == 0) {
                     layer.msg('操作成功！', {icon: 1});
                     window.location.reload();
                 }else {
-                    layer.msg('操作成功！', {icon: 1});
+                    layer.msg('操作失败！', {icon: 1});
                     window.location.reload();
                 }
             }
@@ -132,7 +132,7 @@
                 dataType:'json',
                 url:"{:url('admin/message/delMessage')}",
                 success:function (data) {
-                    if (data.code == 200) {
+                    if (data.code == 0) {
                             $(obj).parents("tr").remove();
                             layer.msg('已删除!',{icon:1,time:1000});
                     }
@@ -151,27 +151,9 @@
                 dataType:'json',
                 url:"{:url('admin/message/delMessage')}",
                 success:function (data) {
-                    if (data.code == 200) {
+                    if (data.code == 0) {
                         layer.msg('删除成功', {icon: 1});
                         $(".layui-form-checked").not('.header').parents('tr').remove();
-                    }
-                }
-            });
-        });
-    }
-    //批量审核
-    function reviewedAll() {
-        var data = tableCheck.getData();
-        layer.confirm('确认要执行操作吗？'+data,function(index){
-            $.ajax({
-                type:'post',
-                data:{id:data},
-                dataType:'json',
-                url:"{:url('admin/article/reviewedAll')}",
-                success:function (data) {
-                    if (data.code == 200) {
-                        layer.msg(data.message, {icon: 1});
-                        window.location.reload();
                     }
                 }
             });

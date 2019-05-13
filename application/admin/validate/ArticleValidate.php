@@ -13,7 +13,6 @@ class ArticleValidate extends BaseValidate
     protected $rule = [
         'title'  => 'require|min:2|max:50',
         'sort'  => 'number',
-        '__token__'=>'require|token',
     ];
 
     protected $message=[

@@ -15,7 +15,7 @@ use app\admin\model\Rulers as RulersModel;
 class Rulers extends BaseController
 {
     protected $beforeActionList = [
-        'auth'=>['index'],
+        'auth'=>['only'=>'index'],
     ];
     public function index()
     {

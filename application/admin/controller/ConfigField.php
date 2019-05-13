@@ -15,7 +15,7 @@ use \app\admin\model\ConfigField as ConfigFieldModel;
 class ConfigField extends BaseController
 {
     protected $beforeActionList = [
-        'auth'=>['index'],
+        'auth'=>['only'=>'index'],
     ];
     public function index()
     {

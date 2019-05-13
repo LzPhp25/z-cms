@@ -13,7 +13,6 @@ class SiteValidate extends BaseValidate
     protected $rule =[
         'cn_name'=>'require|chsAlpha|max:30|unique:config_field',
         'en_name'=>'require|alphaDash|max:20|unique:config_field',
-        '__token__'=>'require|token',
     ];
     protected $message = [
         'cn_name.require'=>'请填写字段的中文名称',

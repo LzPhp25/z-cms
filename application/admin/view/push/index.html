@@ -90,11 +90,11 @@
         function addField(o) {
             var attrDiv = $(o).parent().parent();
             var text = $(o).text();
-            if ($(".field-text").length ==19){
-                layer.msg('不能再加了！',{icon: 5});
-                return false;
-            }
             if (text == "[+]"){
+                if ($(".field-text").length ==15){
+                    layer.msg('不能再加了！',{icon: 5});
+                    return false;
+                }
                 var newDiv = attrDiv.clone();
                 attrDiv.after(newDiv);
                 newDiv.find('a').html('[-]');

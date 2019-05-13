@@ -2,7 +2,7 @@
 MySQL Database Backup Tools
 Server:127.0.0.1:
 Database:zcms
-Data:2019-04-23 17:22:57
+Data:2019-05-08 15:42:38
 */
 SET FOREIGN_KEY_CHECKS=0;
 -- ----------------------------
@@ -29,13 +29,13 @@ CREATE TABLE `lz_article` (
 -- ----------------------------
 -- Records of lz_article
 -- ----------------------------
-INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('295','50','测试标题','测试标题','测试标题测试标题测试标题测试标题测试标题测试标题','h,s,r','51','','1','149',' ','3','0','1555664617');
-INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('293','50','权利的游戏','权利的游戏','','s','50','','1','178',' ','2','0','1555634212');
-INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('296','50','新闻标题','新闻标题','新闻标题','s','52','','1','78','<p>新闻标题新闻标题新闻标题</p>','1','0','1554887721');
-INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('300','50','测试数据2222','测试数据2222','测试数据2222','h,s','50','','1','182',' ','2','0','1555895305');
-INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('301','50','新闻测试','新闻测试','新闻测试','h','52','','1','60',' ','1','0','1555901073');
-INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('302','50','测试新闻','测试新闻','测试新闻','h,s','52','','1','170',' ','1','0','1555895412');
-INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('303','50','阿达','阿达阿达阿达阿达阿达阿达','','','52','','1','180',' ','1','0','1555915541');
+INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('295','50','测试标题','测试标题','测试标题测试标题测试标题测试标题测试标题测试标题','r,h,s','51','','0','149',' ','3','0','1557276850');
+INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('293','50','权利的游戏','权利的游戏','','s,r','50','','1','178',' ','2','0','1555634212');
+INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('296','50','新闻标题','新闻标题','新闻标题','s,r','52','','1','78','<p>新闻标题新闻标题新闻标题</p>','1','0','1554887721');
+INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('300','50','测试数据2222','测试数据2222','测试数据2222','r,h,s','50','','1','182',' ','2','0','1557277620');
+INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('301','50','新闻测试','新闻测试','新闻测试','h,r','52','','1','60',' ','1','0','1555901073');
+INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('302','50','测试新闻','测试新闻','测试新闻','h,s,r','52','','1','170',' ','1','0','1555895412');
+INSERT INTO `lz_article` (`id`,`sort`,`title`,`keywords`,`desc`,`attr`,`cate_id`,`picture`,`reviewed`,`click`,`content`,`pattern_id`,`photos`,`create_time`) VALUES ('303','50','阿达','阿达阿达阿达阿达阿达阿达','','r','52','','1','180',' ','1','0','1555915541');
 
 -- ----------------------------
 -- Table structure for lz_attr
@@ -65,11 +65,14 @@ CREATE TABLE `lz_auth_group` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `rules` char(80) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 -- ----------------------------
 -- Records of lz_auth_group
 -- ----------------------------
-INSERT INTO `lz_auth_group` (`id`,`title`,`status`,`rules`) VALUES ('1','管理员权限组','1','1,10,9');
+INSERT INTO `lz_auth_group` (`id`,`title`,`status`,`rules`) VALUES ('7','超级管理员','1','13,18,20,19,22,37,25,36,35,28,29,30,31,32,33,34');
+INSERT INTO `lz_auth_group` (`id`,`title`,`status`,`rules`) VALUES ('8','网站管理员','1','13,18,19,31,32,33,34');
+INSERT INTO `lz_auth_group` (`id`,`title`,`status`,`rules`) VALUES ('9','文章管理员','1','32,34');
+INSERT INTO `lz_auth_group` (`id`,`title`,`status`,`rules`) VALUES ('10','SEO管理','1','18,20,31,32,34');
 
 -- ----------------------------
 -- Table structure for lz_auth_group_access
@@ -85,7 +88,8 @@ CREATE TABLE `lz_auth_group_access` (
 -- ----------------------------
 -- Records of lz_auth_group_access
 -- ----------------------------
-INSERT INTO `lz_auth_group_access` (`uid`,`group_id`) VALUES ('100','1');
+INSERT INTO `lz_auth_group_access` (`uid`,`group_id`) VALUES ('1','7');
+INSERT INTO `lz_auth_group_access` (`uid`,`group_id`) VALUES ('102','9');
 
 -- ----------------------------
 -- Table structure for lz_auth_rule
@@ -99,13 +103,26 @@ CREATE TABLE `lz_auth_rule` (
   `condition` char(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=38 DEFAULT CHARSET=utf8;
 -- ----------------------------
 -- Records of lz_auth_rule
 -- ----------------------------
-INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('1','admin/User/index','管理员','1','');
-INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('10','admin/Rulers/index','权限表','1','');
-INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('9','admin/Group/index','权限组','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('13','admin/User/index','管理员列表','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('18','admin/System/index','系统列表','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('20','admin/SiteMap/index','网站地图','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('19','admin/System/saveSystem','修改系统','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('22','admin/Rulers/index','权限列表','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('37','admin/Push/index','百度推送','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('25','admin/Group/index','权限组列表','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('36','admin/Rank/index','百度排名','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('35','admin/Pattern/index','模型管理','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('28','admin/Group/delete','删除权限组','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('29','admin/Fore/index','模板选择','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('30','admin/ConfigField/index','字段管理','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('31','admin/Conf/index','网站设置','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('32','admin/Cate/index','栏目管理','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('33','admin/Backup/index','数据库管理','1','');
+INSERT INTO `lz_auth_rule` (`id`,`name`,`title`,`status`,`condition`) VALUES ('34','admin/Article/index','文章管理','1','');
 
 -- ----------------------------
 -- Table structure for lz_cate
@@ -136,13 +153,13 @@ CREATE TABLE `lz_cate` (
   `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`),
   KEY `cate_pid` (`cate_pid`)
-) ENGINE=MyISAM AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=60 DEFAULT CHARSET=utf8;
 -- ----------------------------
 -- Records of lz_cate
 -- ----------------------------
-INSERT INTO `lz_cate` (`id`,`cate_name`,`seo_cate`,`cate_keywords`,`cate_desc`,`cate_img`,`pattern_id`,`cate_status`,`cate_pid`,`cate_sort`,`temp_type`,`out_url`,`index_temp`,`list_temp`,`article_temp`,`page`,`list_order`,`order_by`,`cate_content`,`copy`,`create_time`,`update_time`) VALUES ('50','电影栏目','','','','','2','1','0','50','1','','index_article.html','list_article.html','article_article.html','12','2','1',' ','0','1555634165','1555901258');
-INSERT INTO `lz_cate` (`id`,`cate_name`,`seo_cate`,`cate_keywords`,`cate_desc`,`cate_img`,`pattern_id`,`cate_status`,`cate_pid`,`cate_sort`,`temp_type`,`out_url`,`index_temp`,`list_temp`,`article_temp`,`page`,`list_order`,`order_by`,`cate_content`,`copy`,`create_time`,`update_time`) VALUES ('51','商城栏目','','','','','3','1','0','50','1','','index_article.html','list_article.html','article_article.html','12','2','1',' ','0','1555634733','1555634733');
-INSERT INTO `lz_cate` (`id`,`cate_name`,`seo_cate`,`cate_keywords`,`cate_desc`,`cate_img`,`pattern_id`,`cate_status`,`cate_pid`,`cate_sort`,`temp_type`,`out_url`,`index_temp`,`list_temp`,`article_temp`,`page`,`list_order`,`order_by`,`cate_content`,`copy`,`create_time`,`update_time`) VALUES ('52','新闻栏目','新闻栏目','新闻栏目','','','1','1','0','50','1','','index_article.html','list_article.html','article_article.html','12','2','1',' ','0','1555664696','1555664696');
+INSERT INTO `lz_cate` (`id`,`cate_name`,`seo_cate`,`cate_keywords`,`cate_desc`,`cate_img`,`pattern_id`,`cate_status`,`cate_pid`,`cate_sort`,`temp_type`,`out_url`,`index_temp`,`list_temp`,`article_temp`,`page`,`list_order`,`order_by`,`cate_content`,`copy`,`create_time`,`update_time`) VALUES ('50','电影栏目','','','','','2','1','0','51','1','','index_article.html','list_article.html','article_article.html','12','2','1',' ','0','1555634165','1557276881');
+INSERT INTO `lz_cate` (`id`,`cate_name`,`seo_cate`,`cate_keywords`,`cate_desc`,`cate_img`,`pattern_id`,`cate_status`,`cate_pid`,`cate_sort`,`temp_type`,`out_url`,`index_temp`,`list_temp`,`article_temp`,`page`,`list_order`,`order_by`,`cate_content`,`copy`,`create_time`,`update_time`) VALUES ('51','商城栏目','','','','','3','1','0','50','1','','index_article.html','list_article.html','article_article.html','12','2','1',' ','1','1555634733','1557276881');
+INSERT INTO `lz_cate` (`id`,`cate_name`,`seo_cate`,`cate_keywords`,`cate_desc`,`cate_img`,`pattern_id`,`cate_status`,`cate_pid`,`cate_sort`,`temp_type`,`out_url`,`index_temp`,`list_temp`,`article_temp`,`page`,`list_order`,`order_by`,`cate_content`,`copy`,`create_time`,`update_time`) VALUES ('52','新闻栏目','新闻栏目','新闻栏目','','','1','1','0','50','1','','index_article.html','list_article.html','article_article.html','12','2','1',' ','0','1555664696','1557276881');
 
 -- ----------------------------
 -- Table structure for lz_config_field
@@ -172,6 +189,20 @@ INSERT INTO `lz_config_field` (`id`,`cn_name`,`en_name`,`value`,`values`,`field_
 INSERT INTO `lz_config_field` (`id`,`cn_name`,`en_name`,`value`,`values`,`field_type`,`flexd`,`create_time`) VALUES ('69','版权','copy_right','','','1','1','1555320062');
 INSERT INTO `lz_config_field` (`id`,`cn_name`,`en_name`,`value`,`values`,`field_type`,`flexd`,`create_time`) VALUES ('70','电话','phone','','','1','1','1555320074');
 INSERT INTO `lz_config_field` (`id`,`cn_name`,`en_name`,`value`,`values`,`field_type`,`flexd`,`create_time`) VALUES ('71','地址','address','','','1','1','1555320084');
+
+-- ----------------------------
+-- Table structure for lz_fore
+-- ----------------------------
+DROP TABLE IF EXISTS `lz_fore`;
+CREATE TABLE `lz_fore` (
+  `id` tinyint(3) NOT NULL AUTO_INCREMENT,
+  `fore` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+-- ----------------------------
+-- Records of lz_fore
+-- ----------------------------
+INSERT INTO `lz_fore` (`id`,`fore`) VALUES ('1','moban');
 
 -- ----------------------------
 -- Table structure for lz_movie
@@ -308,7 +339,7 @@ CREATE TABLE `lz_shop` (
 -- ----------------------------
 -- Records of lz_shop
 -- ----------------------------
-INSERT INTO `lz_shop` (`art_id`,`productno`,`brand`,`unit`,`weight`,`marketprice`,`shopprice`,`psalenum`,`pay`) VALUES ('295','asdadasdad123','ash','kg','200','500','800','10000','微信,支付宝,银联,汇款,线下');
+INSERT INTO `lz_shop` (`art_id`,`productno`,`brand`,`unit`,`weight`,`marketprice`,`shopprice`,`psalenum`,`pay`) VALUES ('295','asdadasdad123','ash','kg','200','500','800','10000','微信,支付宝,银联');
 
 -- ----------------------------
 -- Table structure for lz_shop_field
@@ -357,12 +388,14 @@ CREATE TABLE `lz_system` (
   `text_size` mediumint(9) NOT NULL COMMENT '文字水印大小',
   `article_order` tinyint(1) DEFAULT '1' COMMENT '1.时间排序 2.自定义排序',
   `order_by` tinyint(1) DEFAULT '1' COMMENT '1.升序2.降序',
-  `baidu` varchar(100) DEFAULT NULL
+  `baidu` varchar(100) DEFAULT NULL,
+  `login_site` tinyint(1) DEFAULT '0' COMMENT '是否允许多地登录0不允许1允许',
+  `cache` mediumint(9) DEFAULT '0' COMMENT '0无限制时间'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 -- ----------------------------
 -- Records of lz_system
 -- ----------------------------
-INSERT INTO `lz_system` (`id`,`image_type`,`image_size`,`file_type`,`file_size`,`is_code`,`image_code`,`text_code`,`code_south`,`image_issue`,`text_color`,`text_size`,`article_order`,`order_by`,`baidu`) VALUES ('1','jpg,png,gif','10000000','pdf,docx','5000000','0','uploads/water/20190416/53ef9b047316331a8c0d5094dbd4b7cd.png','Z-CMS','5','100','#7c8d99','15','1','1','Uh3bPqonA9eApDQv');
+INSERT INTO `lz_system` (`id`,`image_type`,`image_size`,`file_type`,`file_size`,`is_code`,`image_code`,`text_code`,`code_south`,`image_issue`,`text_color`,`text_size`,`article_order`,`order_by`,`baidu`,`login_site`,`cache`) VALUES ('1','jpg,png,gif','10000000','pdf,docx','5000000','0','uploads/water/20190416/53ef9b047316331a8c0d5094dbd4b7cd.png','Z-CMS','5','100','#7c8d99','15','1','1','Uh3bPqonA9eApDQv','1','0');
 
 -- ----------------------------
 -- Table structure for lz_user
@@ -377,9 +410,10 @@ CREATE TABLE `lz_user` (
   `status` varchar(255) DEFAULT '1' COMMENT '1 正常 0 禁用',
   `create_time` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=103 DEFAULT CHARSET=utf8;
 -- ----------------------------
 -- Records of lz_user
 -- ----------------------------
-INSERT INTO `lz_user` (`id`,`username`,`pass`,`login_ip`,`login_count`,`status`,`create_time`) VALUES ('100','admin','e10adc3949ba59abbe56e057f20f883e','0.0.0.0','0','1','1555049421');
+INSERT INTO `lz_user` (`id`,`username`,`pass`,`login_ip`,`login_count`,`status`,`create_time`) VALUES ('102','username','e10adc3949ba59abbe56e057f20f883e','127.0.0.1','1','1','1557300837');
+INSERT INTO `lz_user` (`id`,`username`,`pass`,`login_ip`,`login_count`,`status`,`create_time`) VALUES ('1','admin','e10adc3949ba59abbe56e057f20f883e','127.0.0.1','9','1','1555049421');
 

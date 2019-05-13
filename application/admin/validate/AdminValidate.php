@@ -13,7 +13,6 @@ class AdminValidate extends BaseValidate
     protected $rule = [
         'username'=>'require|unique:user',
         'pass'=>'require',
-        '__token__'=>'require|token',
     ];
     protected $message = [
         'username.require'=>'请填写帐号',

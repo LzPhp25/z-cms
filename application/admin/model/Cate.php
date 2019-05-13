@@ -34,6 +34,9 @@ class Cate extends BaseModel
             Article::destroy(function ($query) use ($cate){
                     $query->where('cate_id', $cate['id']);
             });
+            Banner::destroy(function ($query) use ($cate){
+                $query->where('cate_id', $cate['id']);
+            });
         });
     }
     /**

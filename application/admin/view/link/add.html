@@ -85,7 +85,7 @@
                 dataType:'json',
                 url:"{:url('admin/link/addLink')}",
                 success:function (data) {
-                    if (data.code == 200){
+                    if (data.code == 0){
                         layer.alert(data.message, {icon: 6},function () {
                             // 获得frame索引
                             var index = parent.layer.getFrameIndex(window.name);

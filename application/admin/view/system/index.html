@@ -157,12 +157,29 @@
                 </div>
             </div>
             <div class="layui-form-item">
+                <label class="layui-form-label">多地登录</label>
+                <div class="layui-input-block">
+                    <input type="radio" {if $system.login_site ==0} checked  {/if} name="login_site" value="0" title="拒绝">
+                    <input type="radio" {if $system.login_site ==1} checked  {/if}name="login_site" value="1" title="允许">
+
+                </div>
+            </div>
+            <div class="layui-form-item">
                 <label class="layui-form-label">推送Token</label>
                 <div class="layui-input-inline">
                     <input type="text" name="baidu"   value="{$system.baidu}"   autocomplete="off" class="layui-input">
                 </div>
                 <div class="layui-form-mid layui-word-aux">
                     <span class="x-red">百度推送token</span>
+                </div>
+            </div>
+            <div class="layui-form-item">
+                <label class="layui-form-label">缓存时间</label>
+                <div class="layui-input-inline">
+                    <input type="text" name="cache"   value="{$system.cache}"   autocomplete="off" class="layui-input">
+                </div>
+                <div class="layui-form-mid layui-word-aux">
+                    <span class="x-red">缓存时间（0为不限制）</span>
                 </div>
             </div>
             <input type="hidden"  name="id"  value="{$system.id}">

@@ -15,7 +15,7 @@ use think\facade\Request;
 class Conf extends BaseController
 {
     protected $beforeActionList = [
-        'auth'=>['index'],
+        'auth'=>['only'=>'index'],
     ];
     public function index()
     {

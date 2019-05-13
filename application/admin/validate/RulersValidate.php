@@ -13,7 +13,6 @@ class RulersValidate extends BaseValidate
     protected $rule = [
         'title'=>'require|unique:auth_rule',
         'name'=>'require|unique:auth_rule',
-        '__token__'=>'require|token',
     ];
     protected $message = [
         'title.require'=>'请填写规则名称',

@@ -53,7 +53,6 @@
                 <input type="checkbox" name="status"  value="1" {if $pattern.status == 1} checked {/if} id="status" lay-skin="switch" lay-text="ON|OFF">
             </div>
         </div>
-        <input type="hidden" name="__token__" value="{$Request.token}" />
         <input type="hidden" name="id" value="{$pattern.id}">
         <input type="hidden" name="old_table" value="{$pattern.table_name}">
         <div class="layui-form-item">

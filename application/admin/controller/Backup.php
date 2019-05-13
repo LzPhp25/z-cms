@@ -5,6 +5,9 @@ use app\admin\common\Controller\BaseController;
 use think\Db;
 class Backup extends BaseController
 {
+    protected $beforeActionList = [
+        'auth'=>['only'=>'index'],
+    ];
     public function index()
     {
         //获取操作内容：（备份/下载/还原/删除）数据库

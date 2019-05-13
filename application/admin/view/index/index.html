@@ -34,7 +34,7 @@
     </ul>
     <ul class="layui-nav right" lay-filter="">
         <li class="layui-nav-item">
-            <a href="javascript:;">{$Think.session.user_name}</a>
+            <a href="javascript:;">{$Think.session.user.username}</a>
             <dl class="layui-nav-child"> <!-- 二级菜单 -->
                 <dd><a onclick="clearCache()" href="javascript:;" >清除缓存</a></dd>
                 <dd><a id="loginOut" href="javascript:;">退出</a></dd>
@@ -46,7 +46,7 @@
                                 dataType:'json',
                                 url:"{:url('admin/index/loginOut')}",
                                 success:function (data) {
-                                    if (data.code == 200){
+                                    if (data.code == 0){
                                         //alert(data.message);
                                         //捉到所有被选中的，发异步进行删除
                                         layer.alert('退出登录成功！', {icon: 6},function () {
@@ -221,7 +221,7 @@
             </li>
             <li>
                 <a href="javascript:;">
-                    <i class="iconfont">&#xe6a8;</i>
+                    <i class="layui-icon">&#xe656;</i>
                     <cite>模板管理</cite>
                     <i class="iconfont nav_right">&#xe697;</i>
                 </a>
@@ -230,6 +230,12 @@
                         <a _href="{:url('admin/fore/index')}">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>选择模板</cite>
+                        </a>
+                    </li >
+                    <li>
+                        <a _href="{:url('admin/fore/style')}">
+                            <i class="iconfont">&#xe6a7;</i>
+                            <cite>CSS/JS</cite>
                         </a>
                     </li >
                     <li>
@@ -257,12 +263,6 @@
                         <a _href="{:url('admin/message/index')}">
                             <i class="iconfont">&#xe6a7;</i>
                             <cite>留言列表</cite>
-                        </a>
-                    </li >
-                    <li>
-                        <a _href="{:url('admin/register/index')}">
-                            <i class="iconfont">&#xe6a7;</i>
-                            <cite>报名列表</cite>
                         </a>
                     </li >
                 </ul>

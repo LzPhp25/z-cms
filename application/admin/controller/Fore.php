@@ -13,6 +13,9 @@ use think\facade\Request;
 
 class Fore extends BaseController
 {
+    protected $beforeActionList = [
+        'auth'=>['only'=>'index'],
+    ];
     public function index()
     {
         $foreName = Db::name('fore')->where('id',1)->value('fore');
@@ -38,10 +41,12 @@ class Fore extends BaseController
         $foreName = Db::name('fore')->where('id',1)->value('fore');
         $size = Request::param('size');
         $dir = "template/". $foreName.'/'.$size.'/';
-        $data = scanFile($dir);
+        @$data = scanFile($dir);
+        $data ? $templateData = $this->getSiteEndFile($data,'html') :$templateData =[];
+        //halt($templateData);
         $this->assign([
             'dir'=>$dir,
-            'htmlList'=>$data,
+            'htmlList'=>$templateData,
             'size'=>$size,
         ]);
         return view();
@@ -90,5 +95,59 @@ class Fore extends BaseController
         file_put_contents($filename, '');
         file_put_contents($filename, $content);
         $this->success('编辑成功！');
+    }
+
+    public function style()
+    {
+        $foreName = Db::name('fore')->where('id',1)->value('fore');
+        $cssdir = "template/". $foreName.'/pc/css/';
+        $jsdir = "template/". $foreName.'/pc/js/';
+        @$jsData = scanFile($jsdir);
+        @$cssData = scanFile($cssdir);
+        $cssData ? $css = $this->getSiteEndFile($cssData,'css'):$css =[];
+        $jsData ? $js =  $this->getSiteEndFile($jsData,'js') : $js =[];
+        $this->assign([
+            'css'=>$css,
+            'js'=>$js,
+            'cssdir'=>$cssdir,
+            'jsdir'=>$jsdir,
+        ]);
+        return view();
+    }
+
+    public function styleEdit()
+    {
+        if (Request::isPost()){
+            $data = Request::param();
+            $filename = $data['file'];
+            $content = $data['content'];
+            file_put_contents($filename, '');
+            file_put_contents($filename, $content);
+            $this->success('编辑成功！');
+            return;
+        }
+        $file = Request::param('file');
+        $data = file_get_contents($file);
+        $this->assign([
+            'data'=>$data,
+            'file'=> $file,
+        ]);
+        return view();
+    }
+
+    /***
+     * 获取指定尾缀的文件列表
+     * return array
+     */
+    private function getSiteEndFile($data, $end)
+    {
+        $arr = array();
+        foreach ($data as $key=>$value){
+            $v = pathinfo($value);
+            if ($v['extension'] == $end){
+                $arr[] = $value;
+            }
+        }
+        return $arr;
     }
 }

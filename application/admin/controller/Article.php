@@ -16,7 +16,7 @@ use app\admin\model\Article as ArticleModel;
 class Article extends BaseController
 {
     protected $beforeActionList = [
-        'auth'=>['index'],
+        'auth'=>['only'=>'index'],
     ];
     public function index()
     {

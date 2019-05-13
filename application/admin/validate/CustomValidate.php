@@ -17,7 +17,6 @@ class CustomValidate extends BaseValidate
         'en_name'=>'require|alpha|checkUnique',
         'length'=>'require|number',
         'table'=>'require',
-        '__token__'=>'require|token',
     ];
     protected $message = [
         'cn_name.require'=>'请填写中文字段名',

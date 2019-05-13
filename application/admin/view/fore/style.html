@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <title>欢迎页面-X-admin2.0</title>
+    <meta name="renderer" content="webkit">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge,chrome=1">
+    <meta name="viewport" content="width=device-width,user-scalable=yes, minimum-scale=0.4, initial-scale=0.8,target-densitydpi=low-dpi" />
+    <link rel="shortcut icon" href="/favicon.ico" type="image/x-icon" />
+    <link rel="stylesheet" href="__ADMIN__css/font.css">
+    <link rel="stylesheet" href="__ADMIN__css/xadmin.css">
+    <script type="text/javascript" src="__ADMIN__js/jq.js"></script>
+    <script type="text/javascript" src="__ADMIN__lib/layui/layui.js" charset="utf-8"></script>
+    <script type="text/javascript" src="__ADMIN__js/xadmin.js"></script>
+    <!-- 让IE8/9支持媒体查询，从而兼容栅格 -->
+    <!--[if lt IE 9]>
+    <script src="__ADMIN__html5.min.js"></script>
+    <script src="__ADMIN__respond.min.js"></script>
+    <![endif]-->
+</head>
+
+<body>
+<div class="x-nav">
+      <span class="layui-breadcrumb">
+        <a href="">首页</a>
+        <a href="">模板管理</a>
+        <a>
+          <cite>模板管理</cite></a>
+      </span>
+    <a class="layui-btn layui-btn-small" style="line-height:1.6em;margin-top:3px;float:right" href="javascript:location.replace(location.href);" title="刷新">
+        <i class="layui-icon" style="line-height:30px">ဂ</i></a>
+</div>
+<div class="x-body">
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th width="80%">CSS</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name='css' id='list'}
+            <tr>
+                <td>{$list}</td>
+                <td>
+                    <a   file="{$cssdir}{$list}"   class="layui-btn layui-btn-xs edit">编辑</a>
+                    <a   file="{$cssdir}{$list}" class="layui-btn layui-btn-danger layui-btn-xs destory">删除</a>
+                </td>
+            </tr>
+        {/volist}
+        </tbody>
+    </table>
+    <table class="layui-table">
+        <thead>
+        <tr>
+            <th width="80%">JS</th>
+            <th>操作</th>
+        </tr>
+        </thead>
+        <tbody>
+        {volist name='js' id='list'}
+        <tr>
+            <td>{$list}</td>
+            <td>
+                <a  file="{$jsdir}{$list}"   class="layui-btn layui-btn-xs edit">编辑</a>
+                <a   file="{$jsdir}{$list}" class="layui-btn layui-btn-danger layui-btn-xs destory">删除</a>
+            </td>
+        </tr>
+        {/volist}
+        </tbody>
+    </table>
+</div>
+<script>
+    $(".edit").click(function () {
+        var file = $(this).attr('file');
+        window.location.href="/admin/fore/styleEdit?file="+file;
+    })
+    $('.destory').click(function () {
+        var file = $(this).attr('file');
+        $.ajax({
+            type:'post',
+            data:{file:file},
+            dataType:'json',
+            url:"{:url('admin/fore/delete')}",
+            success:function (data) {
+                if (data.code == 0){
+                    layer.msg(data.message, {icon: 6},function () {
+                        location.replace(location.href);
+                    });
+                }
+            }
+        })
+    })
+</script>
+</body>
+</html>

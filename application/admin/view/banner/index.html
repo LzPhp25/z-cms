@@ -42,11 +42,11 @@
             <th width="30">
                 <div class="layui-unselect header layui-form-checkbox" lay-skin="primary"><i class="layui-icon">&#xe605;</i></div>
             </th>
-            <th width="20">ID</th>
+            <th>ID</th>
             <th>banner图</th>
-            <th width="240">banner链接</th>
+            <th>banner链接</th>
             <th width="100">banner位置</th>
-            <th width="80">操作</th>
+            <th>操作</th>
         </thead>
         <tbody>
         {volist name='bannerList' id='list'}
@@ -56,7 +56,7 @@
             </td>
             <td>{$list.id}</td>
             <td style="text-align: center">
-                <img style="height: 100px" src="/{$list.banner_img}"/>
+                <a onclick="x_admin_show('预览','{:url("admin/banner/see",["id"=>$list.id])}',1000,400)"    href="javascript:;">【预览】</a>
             </td>
             <td style="text-align: center">
                 {if $list.banner_link}
@@ -84,10 +84,15 @@
         {/volist}
         </tbody>
     </table>
-    <div class="page">
+    <div id="pic"  style="display: none;width: 1200px;height: 400px;z-index: 1111;position: absolute;margin: auto;">
+            <div id="close" style="font-size: 24px;float: right;margin-right: 8px;margin-top: 5px;cursor: pointer;z-index: 1000">X</div>
+            <div id="img_src">
+
+            </div>
     </div>
 </div>
 <script>
+
     layui.use('laydate', function(){
         var laydate = layui.laydate;
 
@@ -111,7 +116,7 @@
                 dataType:'json',
                 url:"{:url('admin/banner/delBanner')}",
                 success:function (data) {
-                    if (data.code == 200) {
+                    if (data.code == 0) {
                         $(obj).parents("tr").remove();
                         layer.msg('已删除!',{icon:1,time:1000});
                     }
@@ -130,7 +135,7 @@
                 dataType:'json',
                 url:"{:url('admin/banner/delBanner')}",
                 success:function (data) {
-                    if (data.code == 200) {
+                    if (data.code == 0) {
                         layer.msg('删除成功', {icon: 1});
                         $(".layui-form-checked").not('.header').parents('tr').remove();
                     }

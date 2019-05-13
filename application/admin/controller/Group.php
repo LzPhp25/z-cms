@@ -15,7 +15,7 @@ use \app\admin\model\Group as GroupModel;
 class Group extends BaseController
 {
     protected $beforeActionList = [
-        'auth'=>['index'],
+        'auth'=>['only'=>'index'],
     ];
     public function index()
     {

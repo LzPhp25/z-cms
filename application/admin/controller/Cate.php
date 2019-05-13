@@ -17,7 +17,7 @@ use app\admin\model\Cate as CateModel;
 class Cate extends BaseController
 {
     protected $beforeActionList = [
-        'auth'=>['index'],
+        'auth'=>['only'=>'index'],
     ];
 
     /**

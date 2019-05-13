@@ -31,7 +31,7 @@
                     <i class="layui-icon">&#xe67c;</i>上传图片
                 </button>
                 <div class="layui-upload-list layui-input-inline ">
-                    <img style="height: 80px" class="layui-upload-img" src="/public/static/admin/images/pic.png"  id="demo1">
+                    <img style="height: 80px" class="layui-upload-img" src="/static/admin/images/pic.png"  id="demo1">
                 </div>
                 <input type="hidden" name="banner_img"  value="" id="up">
             </div>
@@ -88,7 +88,7 @@
                 dataType:'json',
                 url:"{:url('admin/banner/addBanner')}",
                 success:function (data) {
-                    if (data.code == 200){
+                    if (data.code == 0){
                         layer.alert(data.message, {icon: 6},function () {
                             // 获得frame索引
                             var index = parent.layer.getFrameIndex(window.name);
@@ -112,11 +112,11 @@
             elem: '#test1' //绑定元素
             ,url: "{:url('admin/banner/upload')}" //上传接口
             ,accept: 'images' //允许上传的文件类型
-            ,size: 2000 //最大允许上传的文件大小
+            ,size: 1000 //最大允许上传的文件大小
             ,field:'image'
             ,done: function(res){
                 //上传完毕回调
-                if (res.code == 200){
+                if (res.code == 0){
                     layer.msg('上传成功！',{icon: 6,time:1000});
                     $('#demo1').attr('src', '/'+res.img);
                     $('#up').val(res.img);

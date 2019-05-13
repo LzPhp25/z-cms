@@ -16,9 +16,8 @@ use think\facade\Request;
 use \app\admin\model\Pattern as PatternModel;
 class Pattern extends BaseController
 {
-
     protected $beforeActionList = [
-        'auth'=>['index'],
+        'auth'=>['only'=>'index'],
     ];
     public function index()
     {

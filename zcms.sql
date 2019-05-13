@@ -1,5 +1,5 @@
 ﻿# Host: localhost  (Version: 5.5.53)
-# Date: 2019-04-23 17:23:43
+# Date: 2019-05-09 09:21:12
 # Generator: MySQL-Front 5.3  (Build 4.234)
 
 /*!40101 SET NAMES utf8 */;
@@ -24,13 +24,12 @@ CREATE TABLE `lz_article` (
   `photos` tinyint(1) DEFAULT '0',
   `create_time` int(10) NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=304 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 #
 # Data for table "lz_article"
 #
 
-INSERT INTO `lz_article` VALUES (293,50,'权利的游戏','权利的游戏','','s',50,'',1,178,' ','2',0,1555634212),(295,50,'测试标题','测试标题','测试标题测试标题测试标题测试标题测试标题测试标题','h,s,r',51,'',1,149,' ','3',0,1555664617),(296,50,'新闻标题','新闻标题','新闻标题','s',52,'',1,78,'<p>新闻标题新闻标题新闻标题</p>','1',0,1554887721),(300,50,'测试数据2222','测试数据2222','测试数据2222','h,s',50,'',1,182,' ','2',0,1555895305),(301,50,'新闻测试','新闻测试','新闻测试','h',52,'',1,60,' ','1',0,1555901073),(302,50,'测试新闻','测试新闻','测试新闻','h,s',52,'',1,170,' ','1',0,1555895412),(303,50,'阿达','阿达阿达阿达阿达阿达阿达','',NULL,52,'',1,180,' ','1',0,1555915541);
 
 #
 # Structure for table "lz_attr"
@@ -59,13 +58,13 @@ CREATE TABLE `lz_auth_group` (
   `status` tinyint(1) NOT NULL DEFAULT '1',
   `rules` char(80) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=5 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
 
 #
 # Data for table "lz_auth_group"
 #
 
-INSERT INTO `lz_auth_group` VALUES (1,'管理员权限组',1,'1,10,9');
+INSERT INTO `lz_auth_group` VALUES (7,'超级管理员',1,'13,18,20,19,22,37,25,36,35,28,29,30,31,32,33,34'),(8,'网站管理员',1,'13,18,19,31,32,33,34'),(9,'文章管理员',1,'32,34'),(10,'SEO管理',1,'18,20,31,32,34');
 
 #
 # Structure for table "lz_auth_group_access"
@@ -83,7 +82,7 @@ CREATE TABLE `lz_auth_group_access` (
 # Data for table "lz_auth_group_access"
 #
 
-INSERT INTO `lz_auth_group_access` VALUES (100,1);
+INSERT INTO `lz_auth_group_access` VALUES (1,7),(102,9);
 
 #
 # Structure for table "lz_auth_rule"
@@ -97,13 +96,34 @@ CREATE TABLE `lz_auth_rule` (
   `condition` char(100) NOT NULL DEFAULT '',
   PRIMARY KEY (`id`),
   UNIQUE KEY `name` (`name`)
-) ENGINE=MyISAM AUTO_INCREMENT=11 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=40 DEFAULT CHARSET=utf8;
 
 #
 # Data for table "lz_auth_rule"
 #
 
-INSERT INTO `lz_auth_rule` VALUES (1,'admin/User/index','管理员',1,''),(9,'admin/Group/index','权限组',1,''),(10,'admin/Rulers/index','权限表',1,'');
+INSERT INTO `lz_auth_rule` VALUES (13,'admin/User/index','管理员列表',1,''),(18,'admin/System/index','系统列表',1,''),(19,'admin/System/saveSystem','修改系统',1,''),(20,'admin/SiteMap/index','网站地图',1,''),(22,'admin/Rulers/index','权限列表',1,''),(25,'admin/Group/index','权限组列表',1,''),(28,'admin/Group/delete','删除权限组',1,''),(29,'admin/Fore/index','模板选择',1,''),(30,'admin/ConfigField/index','字段管理',1,''),(31,'admin/Conf/index','网站设置',1,''),(32,'admin/Cate/index','栏目管理',1,''),(33,'admin/Backup/index','数据库管理',1,''),(34,'admin/Article/index','文章管理',1,''),(35,'admin/Pattern/index','模型管理',1,''),(36,'admin/Rank/index','百度排名',1,''),(37,'admin/Push/index','百度推送',1,''),(38,'admin/Link/index','友链管理',1,''),(39,'admin/Message/index','留言管理',1,'');
+
+#
+# Structure for table "lz_banner"
+#
+
+CREATE TABLE `lz_banner` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `banner_img` varchar(200) DEFAULT NULL,
+  `banner_link` varchar(200) DEFAULT NULL,
+  `cate_id` int(11) NOT NULL,
+  `sort` mediumint(9) NOT NULL DEFAULT '50',
+  `create_time` int(10) NOT NULL,
+  PRIMARY KEY (`id`),
+  UNIQUE KEY `id` (`id`),
+  KEY `cate_id` (`cate_id`)
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
+
+#
+# Data for table "lz_banner"
+#
+
 
 #
 # Structure for table "lz_cate"
@@ -134,13 +154,12 @@ CREATE TABLE `lz_cate` (
   `update_time` int(10) DEFAULT NULL COMMENT '修改时间',
   PRIMARY KEY (`id`),
   KEY `cate_pid` (`cate_pid`)
-) ENGINE=MyISAM AUTO_INCREMENT=53 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 #
 # Data for table "lz_cate"
 #
 
-INSERT INTO `lz_cate` VALUES (50,'电影栏目','','','','',2,1,0,50,1,'','index_article.html','list_article.html','article_article.html',12,2,1,' ',0,1555634165,1555901258),(51,'商城栏目','','','','',3,1,0,50,1,'','index_article.html','list_article.html','article_article.html',12,2,1,' ',0,1555634733,1555634733),(52,'新闻栏目','新闻栏目','新闻栏目','','',1,1,0,50,1,'','index_article.html','list_article.html','article_article.html',12,2,1,' ',0,1555664696,1555664696);
 
 #
 # Structure for table "lz_config_field"
@@ -167,6 +186,61 @@ CREATE TABLE `lz_config_field` (
 INSERT INTO `lz_config_field` VALUES (55,'网站名称','web_name','网站名称','',1,1,1555310574),(65,'关键字','keywords','','',1,1,1555319975),(66,'描述','desc','','',5,1,1555319992),(67,'网站logo','logo','','',6,1,1555320009),(68,'备案号','beian','','',1,1,1555320043),(69,'版权','copy_right','','',1,1,1555320062),(70,'电话','phone','','',1,1,1555320074),(71,'地址','address','','',1,1,1555320084);
 
 #
+# Structure for table "lz_fore"
+#
+
+CREATE TABLE `lz_fore` (
+  `id` tinyint(3) NOT NULL AUTO_INCREMENT,
+  `fore` varchar(50) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
+
+#
+# Data for table "lz_fore"
+#
+
+INSERT INTO `lz_fore` VALUES (1,'moban');
+
+#
+# Structure for table "lz_link"
+#
+
+CREATE TABLE `lz_link` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `link_name` varchar(50) DEFAULT NULL,
+  `link_href` varchar(200) DEFAULT NULL,
+  `open_type` tinyint(1) DEFAULT '1',
+  `no_follow` tinyint(1) NOT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=4 DEFAULT CHARSET=utf8;
+
+#
+# Data for table "lz_link"
+#
+
+INSERT INTO `lz_link` VALUES (2,'百度','https://www.baidu.com',1,1);
+
+#
+# Structure for table "lz_message"
+#
+
+CREATE TABLE `lz_message` (
+  `id` int(10) unsigned NOT NULL AUTO_INCREMENT,
+  `name` varchar(150) DEFAULT NULL,
+  `phone` varchar(20) DEFAULT NULL,
+  `content` text,
+  `type_id` tinyint(1) NOT NULL,
+  `show` tinyint(1) NOT NULL DEFAULT '0',
+  `create_time` int(10) DEFAULT NULL,
+  PRIMARY KEY (`id`)
+) ENGINE=MyISAM AUTO_INCREMENT=12 DEFAULT CHARSET=utf8;
+
+#
+# Data for table "lz_message"
+#
+
+
+#
 # Structure for table "lz_movie"
 #
 
@@ -184,7 +258,6 @@ CREATE TABLE `lz_movie` (
 # Data for table "lz_movie"
 #
 
-INSERT INTO `lz_movie` VALUES (293,'欧美','英国','2019-04-19 08:36:31','50','','www.junxiwangluo.com'),(300,'大陆','测试数据2222','2019-04-22 09:08:35','80','','');
 
 #
 # Structure for table "lz_movie_field"
@@ -222,7 +295,6 @@ CREATE TABLE `lz_news` (
 # Data for table "lz_news"
 #
 
-INSERT INTO `lz_news` VALUES (296,'admin'),(302,'admin'),(301,'admin'),(303,'admin');
 
 #
 # Structure for table "lz_news_field"
@@ -304,7 +376,6 @@ CREATE TABLE `lz_shop` (
 # Data for table "lz_shop"
 #
 
-INSERT INTO `lz_shop` VALUES (295,'asdadasdad123','ash','kg','200','500','800','10000','微信,支付宝,银联,汇款,线下');
 
 #
 # Structure for table "lz_shop_field"
@@ -348,14 +419,16 @@ CREATE TABLE `lz_system` (
   `text_size` mediumint(9) NOT NULL COMMENT '文字水印大小',
   `article_order` tinyint(1) DEFAULT '1' COMMENT '1.时间排序 2.自定义排序',
   `order_by` tinyint(1) DEFAULT '1' COMMENT '1.升序2.降序',
-  `baidu` varchar(100) DEFAULT NULL
+  `baidu` varchar(100) DEFAULT NULL,
+  `login_site` tinyint(1) DEFAULT '0' COMMENT '是否允许多地登录0不允许1允许',
+  `cache` mediumint(9) DEFAULT '0' COMMENT '0无限制时间'
 ) ENGINE=MyISAM DEFAULT CHARSET=utf8;
 
 #
 # Data for table "lz_system"
 #
 
-INSERT INTO `lz_system` VALUES (1,'jpg,png,gif',10000000,'pdf,docx',5000000,0,'uploads/water/20190416/53ef9b047316331a8c0d5094dbd4b7cd.png','Z-CMS',5,100,'#7c8d99',15,1,1,'Uh3bPqonA9eApDQv');
+INSERT INTO `lz_system` VALUES (1,'jpg,png,gif',10000000,'pdf,docx',5000000,0,'uploads/water/20190416/53ef9b047316331a8c0d5094dbd4b7cd.png','Z-CMS',5,100,'#7c8d99',15,1,1,'Uh3bPqonA9eApDQv',1,0);
 
 #
 # Structure for table "lz_user"
@@ -370,10 +443,10 @@ CREATE TABLE `lz_user` (
   `status` varchar(255) DEFAULT '1' COMMENT '1 正常 0 禁用',
   `create_time` int(10) DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=101 DEFAULT CHARSET=utf8;
+) ENGINE=MyISAM AUTO_INCREMENT=2 DEFAULT CHARSET=utf8;
 
 #
 # Data for table "lz_user"
 #
 
-INSERT INTO `lz_user` VALUES (100,'admin','e10adc3949ba59abbe56e057f20f883e','0.0.0.0','0','1',1555049421);
+INSERT INTO `lz_user` VALUES (1,'admin','e10adc3949ba59abbe56e057f20f883e','127.0.0.1','11','1',1555049421);
